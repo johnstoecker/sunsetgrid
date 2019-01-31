@@ -8,6 +8,22 @@
 	</head>
 	<body>
 		<script src="js/three.min.js"></script>
+		<script id="vertexShader" type="x-shader/x-vertex">
+		  varying vec2 vUv;
+		  void main() {
+		  vUv = uv;
+		    gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
+		  }
+		</script>
+
+		<script id="fragmentShader" type="x-shader/x-fragment">
+		  uniform vec3 color1;
+		  uniform vec3 color2;
+		  varying vec2 vUv;
+		  void main() {
+		    gl_FragColor = vec4(mix(color1, color2, vUv.y),1.0);
+		  }
+		</script>
 		<script>
 			var scene = new THREE.Scene();
 			var camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
@@ -70,6 +86,43 @@
 			});
 
 			scene.add(grid);
+
+			var uniforms = {
+        "color1" : {
+	        type : "c",
+	        value : new THREE.Color(0xf4d676)
+	      },
+	      "color2" : {
+	        type : "c",
+	        value : new THREE.Color(0xff1690)
+	      },
+	    };
+
+	    var fShader = document.getElementById('fragmentShader').text;
+	    var vShader = document.getElementById('vertexShader').text;
+
+	    // Create material
+	    var material = new THREE.ShaderMaterial({
+	      uniforms: uniforms,
+	      vertexShader: vShader,
+	      fragmentShader: fShader
+	    });
+
+			var geometry = new THREE.CircleGeometry( 5, 64 );
+			// var material = new THREE.Mesh( { color: 0xffff00 } );
+			var circle = new THREE.Mesh( geometry, material );
+			circle.position.set(0,9,-40)
+			scene.add( circle );
+
+
+	    // Create ambient light and add to scene.
+	    var light = new THREE.AmbientLight(0x404040); // soft white light
+	    scene.add(light);
+
+	    // Create directional light and add to scene.
+	    var directionalLight = new THREE.DirectionalLight(0xffffff);
+	    directionalLight.position.set(1, 1, 1).normalize();
+	    scene.add(directionalLight);
 
 			var clock = new THREE.Clock();
 			var time = 0;
