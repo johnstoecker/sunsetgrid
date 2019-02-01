@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack"
+    "build": "webpack",
+    "start": "webpack-dev-server --open"
   },
   "repository": {
     "type": "git",
@@ -20,9 +21,11 @@
   "homepage": "https://github.com/johnstoecker/sunsetgrid#readme",
   "devDependencies": {
     "webpack": "^4.29.0",
-    "webpack-cli": "^3.2.1"
+    "webpack-cli": "^3.2.1",
+    "webpack-dev-server": "^3.1.14"
   },
   "dependencies": {
-    "three": "^0.101.0"
+    "three": "^0.101.0",
+    "web-audio-beat-detector": "^7.0.27"
   }
 }
