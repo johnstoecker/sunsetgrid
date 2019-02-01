@@ -15,24 +15,30 @@ var limit = 100;
 // pulse me to the beat
 var grid = new THREE.GridHelper(limit * 2, division, "purple", "purple");
 
+var gridUniforms = {
+  time: {
+    value: 0
+  },
+  limits: {
+    value: new THREE.Vector2(-limit, limit)
+  },
+  speed: {
+    // set me to the beat
+    value: 35
+  },
+  color1: {
+    type: "c",
+    value: new THREE.Color(0xff0000)
+  }
+};
+
 var moveable = [];
 for (let i = 0; i <= division; i++) {
   moveable.push(1, 1, 0, 0); // move horizontal lines only (1 - point is moveable)
 }
 grid.geometry.addAttribute('moveable', new THREE.BufferAttribute(new Uint8Array(moveable), 1));
 grid.material = new THREE.ShaderMaterial({
-  uniforms: {
-    time: {
-      value: 0
-    },
-    limits: {
-      value: new THREE.Vector2(-limit, limit)
-    },
-    speed: {
-      // set me to the beat
-      value: 35
-    }
-  },
+  uniforms: gridUniforms,
   vertexShader: `
     uniform float time;
     uniform vec2 limits;
@@ -40,10 +46,9 @@ grid.material = new THREE.ShaderMaterial({
 
     attribute float moveable;
 
-    varying vec3 vColor;
+    uniform vec3 color1;
 
     void main() {
-      vColor = color;
       float limLen = limits.y - limits.x;
       vec3 pos = position;
       if (floor(moveable + 0.5) > 0.5){ // if a point has "moveable" attribute = 1
@@ -55,10 +60,10 @@ grid.material = new THREE.ShaderMaterial({
     }
   `,
   fragmentShader: `
-    varying vec3 vColor;
+    uniform vec3 color1;
 
     void main() {
-      gl_FragColor = vec4(vColor, 1.);
+      gl_FragColor = vec4(color1, 1.);
     }
   `,
   vertexColors: THREE.VertexColors
@@ -125,6 +130,8 @@ function render() {
     uniforms["color1"].needsUpdate = true
     uniforms["color2"].value.offsetHSL( -0.05, 0, 0 );
     uniforms["color2"].needsUpdate = true
+    gridUniforms["color1"].value.offsetHSL(0.1, 0, 0);
+    gridUniforms["color1"].needsUpdate = true;
     // grid.material.color = new THREE.color(0xff0000)
     // grid.material.needsUpdate = true
     // circle.material.color = new THREE.Color(0xff0000)
