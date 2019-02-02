@@ -288,7 +288,7 @@ function spawnDolphin() {
   // the browser caches the image -- so if I spawn another dolphin, browser
   // just loads that same dolphin. to get a true copy, mangle the source
   // so the browser thinks its different. cool!
-  myImage.src = '../dolphin.gif?' + Math.random();
+  myImage.src = 'dolphin.gif?' + Math.random();
   myImage.style.position = "absolute";
   myImage.style.top = randomYTop + "%";
   myImage.style.left = randomX + "px";
