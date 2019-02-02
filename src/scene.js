@@ -272,7 +272,7 @@ function doBurst() {
     gridUniforms["color1"].value.offsetHSL(0.05, 0, 0);
     gridUniforms["color1"].needsUpdate = true;
     podLocationX = Math.floor(Math.random() * (window.screen.availWidth - 250))
-    podLocationY = Math.foor(Math.random() * 10)
+    podLocationY = Math.floor(Math.random())
 }
 
 // have dolphins generally spawn near each other
@@ -280,11 +280,10 @@ var podLocationX = 50;
 var podLocationY = 10;
 
 function spawnDolphin() {
-  var randomX = podLocationX + Math.floor(Math.random() * 200)
+  var randomX = podLocationX + Math.floor(Math.random() * 150)
   var randomY = podLocationY + Math.floor(Math.random() * 10)
   var randomYTop =  randomY + 35;
   var randomSize = 50 + randomYTop;
-  console.log("spawning dolphin")
   var myImage = new Image();
   // the browser caches the image -- so if I spawn another dolphin, browser
   // just loads that same dolphin. to get a true copy, mangle the source

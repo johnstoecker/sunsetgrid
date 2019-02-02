@@ -16,7 +16,7 @@ console.log(scene)
 
 window.addEventListener('load', function() {
   window.addEventListener("keypress", keypress, false);
-  window.addEventListener("click touch", sunsetAudio.playPause);
+  window.addEventListener("click", sunsetAudio.playPause);
 
   function keypress(e) {
     console.log(e)
