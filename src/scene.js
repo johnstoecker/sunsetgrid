@@ -271,8 +271,34 @@ function doBurst() {
     uniforms["color2"].needsUpdate = true
     gridUniforms["color1"].value.offsetHSL(0.05, 0, 0);
     gridUniforms["color1"].needsUpdate = true;
+    podLocationX = Math.floor(Math.random() * (window.screen.availWidth - 250))
+    podLocationY = Math.foor(Math.random() * 10)
 }
 
+// have dolphins generally spawn near each other
+var podLocationX = 50;
+var podLocationY = 10;
+
+function spawnDolphin() {
+  var randomX = podLocationX + Math.floor(Math.random() * 200)
+  var randomY = podLocationY + Math.floor(Math.random() * 10)
+  var randomYTop =  randomY + 35;
+  var randomSize = 50 + randomYTop;
+  console.log("spawning dolphin")
+  var myImage = new Image();
+  // the browser caches the image -- so if I spawn another dolphin, browser
+  // just loads that same dolphin. to get a true copy, mangle the source
+  // so the browser thinks its different. cool!
+  myImage.src = '../dolphin.gif?' + Math.random();
+  myImage.style.position = "absolute";
+  myImage.style.top = randomYTop + "%";
+  myImage.style.left = randomX + "px";
+  // give the dolphins a crude perspective. closer = bigger dolphin
+  myImage.style.height = randomSize + "px";
+  document.body.appendChild(myImage);
+  // <img id="neonDolphin" src="../dolphin.gif" style="position:absolute; top: 35%; left: 50px; height: 50px;">
+
+}
 
 function getAverageVolume(array, maxSize) {
       var values = 0;
@@ -289,5 +315,5 @@ function getAverageVolume(array, maxSize) {
 
 //TODO: dont export the scene -- only the functions necessary to interact with it
 export default {
-  scene: scene
+  spawnDolphin: spawnDolphin
 }

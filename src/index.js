@@ -16,14 +16,18 @@ console.log(scene)
 
 window.addEventListener('load', function() {
   window.addEventListener("keypress", keypress, false);
-  window.addEventListener("click", sunsetAudio.playPause);
+  window.addEventListener("click touch", sunsetAudio.playPause);
 
   function keypress(e) {
+    console.log(e)
     // spacebar
     if (e.keyCode == 32) {
-      console.log("playpause")
-      console.log(sunsetAudio)
-      sunsetAudio.playPause()
+      sunsetAudio.playPause();
+    }
+
+    if (e.keyCode == 100) {
+      console.log("trying to spawn dolhpin")
+      scene.spawnDolphin();
     }
 
     // t
