@@ -9,20 +9,27 @@
 		<meta name="classification" content="public"/>
 		<meta name="resource-type" content="document"/>
 		<meta name="author" content="johnstoecker.com"/>
+		<link rel="stylesheet" href="main.css">
 
 		<title>Sunset Grid</title>
-		<style>
+		<!-- <style>
 			body { margin: 0; }
 			canvas { width: 100%; height: 100% }
-		</style>
+		</style> -->
 	</head>
 	<body>
 		<script src="main.js"></script>
     <!-- <label id="guideHelp" style="position:fixed;color:gray; margin:10px;margin-top:-80px;font: 300 14px Verdana, Arial, sans-serif;"> -->
       <!-- Press 'h' for help. </label> -->
-		<label id="visualizerInfo" style="position:fixed;color:gray; margin:10px;margin-top:-60px;font: 300 14px Verdana, Arial, sans-serif;">
+		<!-- <label id="visualizerInfo" style="position:fixed;color:gray; margin:10px;margin-top:-60px;font: 300 14px Verdana, Arial, sans-serif;">
 			Press "space" to start streaming
-      </label>
+      </label> -->
+		<div class="console" style="position:fixed;bottom:10px;">
+			<input type="image" id="playButton" src="play_button.png" alt="Play" />
+			<input type="image" id="pauseButton" src="pause_button.png" alt="Pause" />
+			<input type="image" id="dolphinButton" src="dolphin_button.png" alt="Dolphin" />
+			<input type="image" id="nextButton" src="play_button.png" alt="Next" />
+		</div>
 		<div id="audio_box"></div>
 		<!-- TODO: allow mobile users to spawn dolphins with a button -->
 		<!-- <button id="spawn_dolphin" style="position:absolute; top: 10px; left: 10px height: 50px;"><img src="../dolphin.jpg"></button> -->

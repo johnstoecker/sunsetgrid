@@ -1,36 +1,26 @@
-import framework from './framework'
-
 import scene from './scene'
 
 import sunsetAudio from './audio'
 
-
-
-console.log(framework)
-
-// framework.init()
-console.log('asdf')
-
-console.log(scene)
-
-
 window.addEventListener('load', function() {
   window.addEventListener("keypress", keypress, false);
-  window.addEventListener("click", sunsetAudio.playPause);
+  // window.addEventListener("click", sunsetAudio.playPause);
+  document.getElementById("playButton").addEventListener("click", sunsetAudio.playPause);
+  document.getElementById("pauseButton").addEventListener("click", sunsetAudio.playPause);
+  document.getElementById("nextButton").addEventListener("click", sunsetAudio.nextStream);
+  document.getElementById("dolphinButton").addEventListener("click", scene.spawnDolphin);
 
   function keypress(e) {
-    console.log(e)
     // spacebar
     if (e.keyCode == 32) {
       sunsetAudio.playPause();
     }
-
+    // 'd'
     if (e.keyCode == 100) {
-      console.log("trying to spawn dolhpin")
       scene.spawnDolphin();
     }
 
-    // t
+    // 't'
     if (e.keyCode == 116) {
       // toggle instructions
       if (document.getElementById('visualizerInfo').style.visibility == "hidden") {

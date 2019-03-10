@@ -178,7 +178,7 @@ geometry.faces.push(
 var mountains = new THREE.Mesh(
         geometry,
         new THREE.MeshBasicMaterial({
-          color: 0x2222AA,
+          color: 0x2222FF,
           wireframe: true
         }))
 // mountains.position.set(0,0,-100);
@@ -295,6 +295,7 @@ function spawnDolphin() {
   // give the dolphins a crude perspective. closer = bigger dolphin
   myImage.style.height = randomSize + "px";
   document.body.appendChild(myImage);
+  setTimeout(document)
   // <img id="neonDolphin" src="../dolphin.gif" style="position:absolute; top: 35%; left: 50px; height: 50px;">
 
 }
