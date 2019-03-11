@@ -208,6 +208,209 @@ var sunOccluder = new THREE.Mesh(
 scene.add(sunOccluder);
 
 
+
+//create a group and add the two cubes
+//These cubes can now be rotated / scaled etc as a group
+// var group = new THREE.Group();
+// group.add( cubeA );
+// group.add( cubeB );
+
+//add a city skyline
+
+// const loader = new THREE.TextureLoader();
+// loader.crossOrigin = '';
+// const texture = loader.load('./building_texture_1.png');
+// var texture = new THREE.TextureLoader().load( './building_texture_1.png' );
+
+// immediately use the texture for material creation
+// var buildingMaterial = new THREE.MeshBasicMaterial( { map: texture } );
+
+// add gradient for the sun
+var buildingUniforms = {
+  "darkblue" : {
+    type : "c",
+    value : new THREE.Color(0x180332)
+  },
+  "lightblue" : {
+    type : "c",
+    value : new THREE.Color(0x1d429c)
+  },
+
+  "darkpurple" : {
+    type : "c",
+    value : new THREE.Color(0x20053c)
+  },
+  "lightpurple" : {
+    type : "c",
+    value : new THREE.Color(0x20053c)
+  },
+
+  "darkpink" : {
+    type : "c",
+    value : new THREE.Color(0x3f0354)
+  },
+  "lightpink" : {
+    type : "c",
+    value : new THREE.Color(0x5e0760)
+  },
+
+  "darkishblue" : {
+    type : "c",
+    value : new THREE.Color(0x423bab)
+  },
+  "lightishblue" : {
+    type : "c",
+    value : new THREE.Color(0x4569c2)
+  },
+};
+
+// 20053c
+// 4d196e
+
+
+var buildingMaterial = new THREE.ShaderMaterial({
+  uniforms: buildingUniforms,
+  vertexShader: `varying vec2 vUv;
+  void main() {
+  vUv = uv;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
+  }`,
+  fragmentShader: `uniform vec3 darkblue;
+  uniform vec3 lightblue;
+  varying vec2 vUv;
+  void main() {
+    gl_FragColor = vec4(mix(darkblue, lightblue, vUv.y),1.0);
+  }`
+});
+
+var buildingMaterial2 = new THREE.ShaderMaterial({
+  uniforms: buildingUniforms,
+  vertexShader: `varying vec2 vUv;
+  void main() {
+  vUv = uv;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
+  }`,
+  fragmentShader: `uniform vec3 darkpurple;
+  uniform vec3 lightpurple;
+  varying vec2 vUv;
+  void main() {
+    gl_FragColor = vec4(mix(darkpurple, lightpurple, vUv.y),1.0);
+  }`
+});
+
+var buildingMaterial3 = new THREE.ShaderMaterial({
+  uniforms: buildingUniforms,
+  vertexShader: `varying vec2 vUv;
+  void main() {
+  vUv = uv;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
+  }`,
+  fragmentShader: `uniform vec3 darkpink;
+  uniform vec3 lightpink;
+  varying vec2 vUv;
+  void main() {
+    gl_FragColor = vec4(mix(darkpink, lightpink, vUv.y),1.0);
+  }`
+});
+
+
+var buildingMaterial4 = new THREE.ShaderMaterial({
+  uniforms: buildingUniforms,
+  vertexShader: `varying vec2 vUv;
+  void main() {
+  vUv = uv;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
+  }`,
+  fragmentShader: `uniform vec3 darkishblue;
+  uniform vec3 lightishblue;
+  varying vec2 vUv;
+  void main() {
+    gl_FragColor = vec4(mix(darkishblue, lightishblue, vUv.y),1.0);
+  }`
+});
+
+
+var buildingMaterialBlue = new THREE.MeshLambertMaterial( {color: 0x0000ff} );
+var buildingMaterialRed = new THREE.MeshLambertMaterial( {color: 0xff0000} );
+
+var building1Geometry = new THREE.BoxGeometry( 5, 10, 5 );
+var building1 = new THREE.Mesh( building1Geometry, buildingMaterialBlue );
+building1.position.set(68, 5, -90);
+scene.add( building1 );
+
+var building2Geometry = new THREE.BoxGeometry( 5, 10, 5 );
+var geometry = new THREE.EdgesGeometry( building2Geometry );
+var material = new THREE.LineBasicMaterial( { color: 0xff0000 } );
+var building2 = new THREE.LineSegments( geometry, material );
+building2.position.set(63, 5, -90);
+scene.add( building2 );
+window.building2 = building2;
+
+// var building2 = new THREE.Mesh( building2Geometry, buildingMaterial2 );
+// building2.position.set(63, 5, -90);
+// scene.add( building2 );
+
+var building3Geometry = new THREE.BoxGeometry( 4, 12, 4 );
+var building3 = new THREE.Mesh( building3Geometry, buildingMaterial3 );
+building3.position.set(58, 6, -90);
+scene.add( building3 );
+var building3Geometry2 = new THREE.BoxGeometry( 2, 2, 2 );
+var building3top = new THREE.Mesh( building3Geometry2, buildingMaterial3 );
+building3top.position.set(58, 13, -90);
+scene.add( building3top );
+window.building3 = building3;
+window.building3top = building3top;
+
+var building4Geometry = new THREE.BoxGeometry( 4, 4, 4 );
+var building4 = new THREE.Mesh( building4Geometry, buildingMaterialRed);
+building4.position.set(54, 2, -90);
+scene.add(building4);
+
+var building4Geometry2 = new THREE.Geometry();
+
+building4Geometry2.vertices = [
+    new THREE.Vector3( 52, 4, -88 ),
+    new THREE.Vector3( 52, 4, -92 ),
+    new THREE.Vector3( 56, 4, -92 ),
+    new THREE.Vector3( 56, 4, -88 ),
+    new THREE.Vector3( 54, 12, -90 ),
+];
+
+building4Geometry2.faces = [
+    // new THREE.Face3( 0, 1, 2 ),
+    // new THREE.Face3( 0, 2, 3 ),
+    new THREE.Face3( 1, 0, 4 ),
+    new THREE.Face3( 2, 1, 4 ),
+    new THREE.Face3( 2, 4, 3 ),
+    new THREE.Face3( 3, 4, 0 )
+];
+
+// var building4Geometry2 = new THREE.CylinderGeometry( 1, 4, 12, 4 );
+var building4top = new THREE.Mesh( building4Geometry2,new THREE.MeshBasicMaterial({
+  color: 0x2222FF,
+  wireframe: true
+}));
+// building4top.position.set(54, 10, -90)
+scene.add( building4top );
+window.building4top = building4top;
+
+// var hemLight = new THREE.HemisphereLight( 0xff0000, 0x0000ff, 1 );
+// scene.add( hemLight );
+
+// var directionalLight = new THREE.DirectionalLight( 0xffffff, 1);
+// directionalLight.castShadow = true;
+// directionalLight.position.set(0,50,-150);
+// directionalLight.target = cube;
+//
+var light = new THREE.PointLight( 0xffffff, 2, 150 );
+light.position.set( 0, 10, -95 );
+scene.add( light );
+window.light = light;
+
+var light = new THREE.AmbientLight( 0x404040 ); // soft white light
+scene.add( light );
+
+
 var clock = new THREE.Clock();
 var time = 0;
 var count = 0;
@@ -233,7 +436,6 @@ function render() {
     if (averageVolume > 20 && averageVolume > 1.25 * movingAverageVolume && lastBurst == -1) {
       lastBurst = count;
       doBurst();
-      console.log(array.length)
     }
     if (count - lastBurst > 15) {
       lastBurst = -1;
@@ -246,22 +448,57 @@ function render() {
   renderer.render(scene, camera);
 }
 
-function updateMountains(array) {
-  mountains.geometry.vertices[1].y = 20 + array[350]/15;
-  mountains.geometry.vertices[4].y = 5 + array[330]/25;
-  mountains.geometry.vertices[5].y = 12 + array[280]/15;
-  mountains.geometry.vertices[6].y = 2 + array[280]/25;
-  mountains.geometry.vertices[7].y = 16 + array[210]/15;
-  // mountains.geometry.vertices[13].y = 3 + array[170]/45;
-  mountains.geometry.vertices[17].y = 13 + array[170]/15;
-  mountains.geometry.vertices[18].y = 10 + array[170]/25;
-  mountains.geometry.vertices[19].y = 18 + array[160]/15;
-  mountains.geometry.vertices[20].y = 19 + array[140]/15;
-  mountains.geometry.vertices[21].y = 5 + array[130]/25;
-  mountains.geometry.vertices[22].y = 22 + array[120]/15;
-  mountains.geometry.vertices[23].y = 6 + array[110]/35;
+function updateBuildings(array) {
+  building1.geometry.vertices[0].y = 5 + array[350]/8;
+  building1.geometry.vertices[1].y = 5 + array[350]/8;
+  building1.geometry.vertices[4].y = 5 + array[350]/8;
+  building1.geometry.vertices[5].y = 5 + array[350]/8;
+  building1.geometry.verticesNeedUpdate = true;
 
-  mountains.geometry.verticesNeedUpdate = true;
+  // indices on edge geometry of top y value
+  var indices = [1,7,10,19,25,31,34,43,49,52,55,58];
+  for (var i=0; i<indices.length; i++) {
+    var index = indices[i];
+    building2.geometry.attributes.position.array[index] = 5 + array[330]/8;
+  }
+  building2.geometry.scale(1,1,1);
+
+
+  // building2.geometry.vertices[0].y = 5 + array[330]/8;
+  // building2.geometry.vertices[1].y = 5 + array[330]/8;
+  // building2.geometry.vertices[4].y = 5 + array[330]/8;
+  // building2.geometry.vertices[5].y = 5 + array[330]/8;
+  // building2.geometry.verticesNeedUpdate = true;
+
+  building3.geometry.vertices[0].y = 6 + array[280]/8;
+  building3.geometry.vertices[1].y = 6 + array[280]/8;
+  building3.geometry.vertices[4].y = 6 + array[280]/8;
+  building3.geometry.vertices[5].y = 6 + array[280]/8;
+  building3.geometry.verticesNeedUpdate = true;
+  building3top.geometry.vertices[0].y = 1 + array[280]/8;
+  building3top.geometry.vertices[1].y = 1 + array[280]/8;
+  building3top.geometry.vertices[4].y = 1 + array[280]/8;
+  building3top.geometry.vertices[5].y = 1 + array[280]/8;
+  building3top.geometry.verticesNeedUpdate = true;
+}
+
+
+function updateMountains(array) {
+  // mountains.geometry.vertices[1].y = 20 + array[350]/15;
+  // mountains.geometry.vertices[4].y = 5 + array[330]/25;
+  // mountains.geometry.vertices[5].y = 12 + array[280]/15;
+  // mountains.geometry.vertices[6].y = 2 + array[280]/25;
+  // mountains.geometry.vertices[7].y = 16 + array[210]/15;
+  // // mountains.geometry.vertices[13].y = 3 + array[170]/45;
+  // mountains.geometry.vertices[17].y = 13 + array[170]/15;
+  // mountains.geometry.vertices[18].y = 10 + array[170]/25;
+  // mountains.geometry.vertices[19].y = 18 + array[160]/15;
+  // mountains.geometry.vertices[20].y = 19 + array[140]/15;
+  // mountains.geometry.vertices[21].y = 5 + array[130]/25;
+  // mountains.geometry.vertices[22].y = 22 + array[120]/15;
+  // mountains.geometry.vertices[23].y = 6 + array[110]/35;
+  //
+  // mountains.geometry.verticesNeedUpdate = true;
 }
 
 function doBurst() {
@@ -283,21 +520,16 @@ function spawnDolphin() {
   var randomX = podLocationX + Math.floor(Math.random() * 150)
   var randomY = podLocationY + Math.floor(Math.random() * 10)
   var randomYTop =  randomY + 35;
-  var randomSize = 50 + randomYTop;
   var myImage = new Image();
   // the browser caches the image -- so if I spawn another dolphin, browser
   // just loads that same dolphin. to get a true copy, mangle the source
   // so the browser thinks its different. cool!
-  myImage.src = 'dolphin.gif?' + Math.random();
+  myImage.src = 'dolphin_animation_small.gif?' + Math.random();
   myImage.style.position = "absolute";
   myImage.style.top = randomYTop + "%";
   myImage.style.left = randomX + "px";
-  // give the dolphins a crude perspective. closer = bigger dolphin
-  myImage.style.height = randomSize + "px";
   document.body.appendChild(myImage);
-  setTimeout(document)
-  // <img id="neonDolphin" src="../dolphin.gif" style="position:absolute; top: 35%; left: 50px; height: 50px;">
-
+  setTimeout(function() { document.body.removeChild(myImage);}, 5000);
 }
 
 function getAverageVolume(array, maxSize) {
@@ -313,7 +545,6 @@ function getAverageVolume(array, maxSize) {
       return average;
 }
 
-//TODO: dont export the scene -- only the functions necessary to interact with it
 export default {
   spawnDolphin: spawnDolphin
 }
