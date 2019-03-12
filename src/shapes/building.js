@@ -94,7 +94,10 @@ var innerMaterial = new THREE.MeshBasicMaterial( {
 //
 
 
-function createPyramid(dimensions, position, color) {
+function createPyramid(data) {
+  var dimensions = data.dimensions;
+  var position = data.position;
+  var color = data.color;
   var buildingGeometry = new THREE.Geometry();
   buildingGeometry.vertices = [
       // new THREE.Vector3( 52, 4, -88 ),
@@ -110,13 +113,19 @@ function createPyramid(dimensions, position, color) {
       new THREE.Vector3( position[0], position[1] + dimensions[1]/2, position[2] ),
 
   ];
+
+//   4
+//
+// 1   2
+//  0   3
+
   buildingGeometry.faces = [
       // new THREE.Face3( 0, 1, 2 ),
       // new THREE.Face3( 0, 2, 3 ),
-      new THREE.Face3( 1, 0, 4 ),
-      new THREE.Face3( 2, 1, 4 ),
-      new THREE.Face3( 2, 4, 3 ),
-      new THREE.Face3( 3, 4, 0 )
+      new THREE.Face3( 1, 4, 0 ),
+      new THREE.Face3( 2, 4, 1 ),
+      new THREE.Face3( 3, 4, 2 ),
+      new THREE.Face3( 0, 4, 3 )
   ];
   var geometry = new THREE.EdgesGeometry( buildingGeometry );
   var material = new THREE.LineBasicMaterial( { color: color } );
@@ -124,25 +133,124 @@ function createPyramid(dimensions, position, color) {
   var buildingInner = new THREE.Mesh( buildingGeometry, innerMaterial);
   return {
     edges: building,
-    inner: buildingInner
+    inner: buildingInner,
+    data: data
   }
 }
 
-function createCube(dimensions, position, color) {
-  var building1Geometry = new THREE.BoxGeometry( dimensions[0], dimensions[1], dimensions[2] );
+// a frustum is a pyramid with a flat top
+// dimensions: bottom length, bottom width, height, top length, top width
+function createFrustum(data) {
+  var dimensions = data.dimensions;
+  var position = data.position;
+  var color = data.color;
+  var buildingGeometry = new THREE.Geometry();
+  buildingGeometry.vertices = [
+      // new THREE.Vector3( 52, 4, -88 ),
+      // new THREE.Vector3( 52, 4, -92 ),
+      // new THREE.Vector3( 56, 4, -92 ),
+      // new THREE.Vector3( 56, 4, -88 ),
+      // new THREE.Vector3( 54, 12, -90 ),
+
+      new THREE.Vector3( position[0] - dimensions[0]/2, position[1] - dimensions[1]/2, position[2] - dimensions[2]/2 ),
+      new THREE.Vector3( position[0] - dimensions[0]/2, position[1] - dimensions[1]/2, position[2] + dimensions[2]/2 ),
+      new THREE.Vector3( position[0] + dimensions[0]/2, position[1] - dimensions[1]/2, position[2] + dimensions[2]/2 ),
+      new THREE.Vector3( position[0] + dimensions[0]/2, position[1] - dimensions[1]/2, position[2] - dimensions[2]/2 ),
+
+      new THREE.Vector3( position[0] - dimensions[3]/2, position[1] + dimensions[1]/2, position[2] - dimensions[4]/2 ),
+      new THREE.Vector3( position[0] - dimensions[3]/2, position[1] + dimensions[1]/2, position[2] + dimensions[4]/2 ),
+      new THREE.Vector3( position[0] + dimensions[3]/2, position[1] + dimensions[1]/2, position[2] + dimensions[4]/2 ),
+      new THREE.Vector3( position[0] + dimensions[3]/2, position[1] + dimensions[1]/2, position[2] - dimensions[4]/2 ),
+
+  ];
+
+//5    6
+// 4    7
+//
+// 1   2
+//  0   3
+
+  buildingGeometry.faces = [
+      // new THREE.Face3( 0, 1, 2 ),
+      // new THREE.Face3( 0, 2, 3 ),
+      new THREE.Face3( 1, 4, 0 ),
+      new THREE.Face3( 1, 5, 4 ),
+      new THREE.Face3( 2, 6, 1 ),
+      new THREE.Face3( 1, 6, 5 ),
+      new THREE.Face3( 3, 7, 2 ),
+      new THREE.Face3( 2, 7, 6 ),
+      new THREE.Face3( 0, 4, 3 ),
+      new THREE.Face3( 3, 4, 7 ),
+      new THREE.Face3( 4, 5, 7 ),
+      new THREE.Face3( 7, 5, 6 )
+
+  ];
+  var geometry = new THREE.EdgesGeometry( buildingGeometry );
+  var material = new THREE.LineBasicMaterial( { color: color } );
+  var building = new THREE.LineSegments( geometry, material );
+  var buildingInner = new THREE.Mesh( buildingGeometry, innerMaterial);
+  return {
+    edges: building,
+    inner: buildingInner,
+    data: data
+  }
+}
+
+function createCube(data) {
+  var dimensions = data.dimensions;
+  var position = data.position;
+  var color = data.color;
+
+  var building1Geometry = new THREE.Geometry();
+  building1Geometry.vertices = [
+      new THREE.Vector3( position[0] - dimensions[0]/2, position[1] - dimensions[1]/2, position[2] - dimensions[2]/2 ),
+      new THREE.Vector3( position[0] - dimensions[0]/2, position[1] - dimensions[1]/2, position[2] + dimensions[2]/2 ),
+      new THREE.Vector3( position[0] + dimensions[0]/2, position[1] - dimensions[1]/2, position[2] + dimensions[2]/2 ),
+      new THREE.Vector3( position[0] + dimensions[0]/2, position[1] - dimensions[1]/2, position[2] - dimensions[2]/2 ),
+
+      new THREE.Vector3( position[0] - dimensions[0]/2, position[1] + dimensions[1]/2, position[2] - dimensions[2]/2 ),
+      new THREE.Vector3( position[0] - dimensions[0]/2, position[1] + dimensions[1]/2, position[2] + dimensions[2]/2 ),
+      new THREE.Vector3( position[0] + dimensions[0]/2, position[1] + dimensions[1]/2, position[2] + dimensions[2]/2 ),
+      new THREE.Vector3( position[0] + dimensions[0]/2, position[1] + dimensions[1]/2, position[2] - dimensions[2]/2 ),
+
+  ];
+
+  building1Geometry.faces = [
+      new THREE.Face3( 1, 4, 0 ),
+      new THREE.Face3( 1, 5, 4 ),
+      new THREE.Face3( 2, 6, 1 ),
+      new THREE.Face3( 1, 6, 5 ),
+      new THREE.Face3( 3, 7, 2 ),
+      new THREE.Face3( 2, 7, 6 ),
+      new THREE.Face3( 0, 4, 3 ),
+      new THREE.Face3( 3, 4, 7 ),
+      new THREE.Face3( 4, 5, 7 ),
+      new THREE.Face3( 7, 5, 6 )
+
+  ];
+
+  // var building1Geometry = new THREE.BoxGeometry( dimensions[0], dimensions[1], dimensions[2] );
   var geometry = new THREE.EdgesGeometry( building1Geometry );
   var material = new THREE.LineBasicMaterial( { color: color } );
   var building1 = new THREE.LineSegments( geometry, material );
-  building1.position.set(position[0], position[1], position[2]);
   var building1Inner = new THREE.Mesh( building1Geometry, innerMaterial);
-  building1Inner.position.set(position[0], position[1], position[2]);
   return {
     edges: building1,
-    inner: building1Inner
+    inner: building1Inner,
+    data: data
+  }
+}
+
+function createBuilding(buildingData) {
+  if (buildingData.shape == "cube") {
+    return createCube(buildingData);
+  } else if (buildingData.shape == "pyramid") {
+    return createPyramid(buildingData);
+  } else if (buildingData.shape == "frustum") {
+    return createFrustum(buildingData);
   }
 }
 
 export default {
-  createCube: createCube,
-  createPyramid: createPyramid
+  createBuilding: createBuilding
 }

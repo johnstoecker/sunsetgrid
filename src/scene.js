@@ -10,6 +10,8 @@ camera.lookAt(scene.position);
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
+// useful for checking how many calls/frame -- renderer.info
+window.renderer = renderer;
 
 // moving grid
 var division = 20;
@@ -111,55 +113,86 @@ var sunOccluder = Mountains.createSunOccluder();
 scene.add(mountains);
 scene.add(sunOccluder);
 
-var cubeBuildingData = [
+
+// move -- stretchy stretches from y=0 to the beat. bouncy just moves up and down to the beat (stays the same size)
+// cubes, pyramids, frustums (pyramid with flat top)
+var buildingData = [
   {
-    dimensions: [5,10,5],position: [68,5,-90],color: 0xff0000,frequency:350
+    dimensions: [5,10,5],position: [68,5,-90],color: 0xff0000,frequency:350,shape:"cube",move:"stretchy"
   },{
-    dimensions: [5,10,5],position: [63,5,-90],color: 0xff0000,frequency:330
+    dimensions: [5,10,5],position: [63,5,-90],color: 0xffff00,frequency:330,shape:"cube",move:"stretchy"
   },{
-    dimensions: [4,12,4],position: [58,6,-90],color: 0xff0000,frequency:280
+    dimensions: [4,12,4],position: [58,6,-90],color: 0xff00ff,frequency:280,shape:"cube",move:"stretchy"
   },{
-    dimensions: [2,2,2],position: [58,13,-90],color: 0xff0000,frequency:280
+    dimensions: [2,2,2],position: [58,13,-90],color: 0xff00ff,frequency:280,shape:"cube",move:"bouncy"
   },{
-    dimensions: [4,4,4],position: [54,2,-90],color: 0xff0000,frequency:250
+    dimensions: [4,4,4],position: [54,2,-90],color: 0x00ffff,frequency:250,shape:"cube",move:"stretchy"
+  },{
+    dimensions: [6,14,6],position: [44,7,-90],color: 0xfff000,frequency:220,shape:"cube",move:"stretchy"
+  },{
+    dimensions: [2,8,2],position: [38,4,-90],color: 0xfff000,frequency:200,shape:"cube",move:"stretchy"
+  },{
+    dimensions: [3,12,3],position: [36,6,-90],color: 0xff0f00,frequency:190,shape:"cube",move:"stretchy"
+  },{
+    dimensions: [4,6,4],position: [32,3,-90],color: 0xff00ff,frequency:180,shape:"cube",move:"stretchy"
+  },{
+    dimensions: [3,4,3],position: [32,8,-90],color: 0xff00ff,frequency:180,shape:"cube",move:"bouncy"
+  },{
+    dimensions: [1,2,1],position: [32,11,-90],color: 0xff00ff,frequency:180,shape:"cube",move:"bouncy"
+  },{
+    dimensions: [10,8,10],position: [25,4,-90],color: 0xff00ff,frequency:170,shape:"cube",move:"stretchy"
+  },{
+    dimensions: [8,2,8],position: [25,9,-90],color: 0xff00ff,frequency:170,shape:"cube",move:"bouncy"
+  },{
+    dimensions: [4,18,8],position: [18,9,-90],color: 0xff00ff,frequency:160,shape:"cube",move:"stretchy"
+  },{
+    dimensions: [6,12,6],position: [12,6,-90],color: 0xff00ff,frequency:140,shape:"cube",move:"stretchy"
+  }, {
+    dimensions: [4,8,4], position: [54,8, -90], color: 0x00ffff, frequency: 250, shape:"pyramid",move:"bouncy"
+  }, {
+    dimensions: [6,10,6,4,4], position: [6,5, -90], color: 0x00ffff, frequency: 130, shape:"frustum",move:"stretchy"
+  }, {
+    dimensions: [6,10,6,4,4], position: [-6,5, -90], color: 0x00ffff, frequency: 130, shape:"frustum",move:"stretchy"
+  }, {
+    dimensions: [12,2,2], position: [0,6, -90], color: 0x00ffff, frequency: 130, shape:"cube",move:"bouncy"
+  }, {
+    dimensions: [8,18,8], position: [-18,8, -90], color: 0x00ffff, frequency: 120, shape:"pyramid",move:"stretchy"
   }
 ]
 
-var cubeBuildings = [];
-for(var i=0; i<cubeBuildingData.length; i++) {
-  var building = Building.createCube(cubeBuildingData[i].dimensions,cubeBuildingData[i].position, cubeBuildingData[i].color)
+// var cubeBuildings = [];
+// for(var i=0; i<cubeBuildingData.length; i++) {
+//   var building = Building.createCube(cubeBuildingData[i].dimensions,cubeBuildingData[i].position, cubeBuildingData[i].color)
+//   scene.add(building.edges);
+//   scene.add(building.inner);
+//   cubeBuildings.push({
+//     building: building,
+//     data: cubeBuildingData[i]
+//   })
+// }
+
+
+var buildings = [];
+for(var i=0; i<buildingData.length; i++) {
+  var building = Building.createBuilding(buildingData[i]);
   scene.add(building.edges);
   scene.add(building.inner);
-  cubeBuildings.push({
-    building: building,
-    data: cubeBuildingData[i]
-  })
+  buildings.push(building);
 }
+window.buildings = buildings;
 
-//
-// var building1 = Building.createCube([5,10,5], [68, 5, -90], 0xff0000);
-// scene.add(building1.edges);
-// scene.add(building1.inner);
-//
-// var building2 = Building.createCube([5,10,5], [63, 5, -90], 0xff0000);
-// scene.add(building2.edges);
-// scene.add(building2.inner);
-//
-// var building3 = Building.createCube([4,12,4], [58,6, -90], 0xff0000);
-// scene.add(building3.edges);
-// scene.add(building3.inner);
-// window.building3 = building3;
-// var building3Top = Building.createCube([2,2,2],[58,13,-90], 0xff0000);
-// scene.add(building3Top.edges);
-// scene.add(building3Top.inner);
-// window.building3Top = building3Top;
-//
-// var building4 = Building.createCube([4,4,4], [54, 2, -90], 0xff0000);
-// scene.add(building4.edges);
-// scene.add(building4.inner);
-var building4Top = Building.createPyramid([4,8,4], [54, 8, -90], 0xff0000);
-scene.add(building4Top.edges);
-scene.add(building4Top.inner);
+// var pyramidBuildings = []
+// for(var i=0; i<pyramidBuildingData.length; i++) {
+//   var building = Building.createPyramid(pyramidBuildingData[i].dimensions,pyramidBuildingData[i].position, pyramidBuildingData[i].color);
+//   scene.add(building.edges);
+//   scene.add(building.inner);
+//   pyramidBuildings.push({
+//     building: building,
+//     data: pyramidBuildingData[i]
+//   });
+// }
+// window.pyramidBuildings = pyramidBuildings;
+
 
 
 // var hemLight = new THREE.HemisphereLight( 0xff0000, 0x0000ff, 1 );
@@ -197,7 +230,7 @@ function render() {
     // drop other frequencies, only care about bass
     volumeAverages.push(averageVolume);
     var movingAverageVolume = getAverageVolume(volumeAverages, volumeAverages.length);
-    // every 3 ticks, update the ~mountains~ buildlings
+    // every 3 ticks, update the ~mountains~ buildings
     if (count % 3 == 0) {
       updateBuildings(array);
     }
@@ -216,16 +249,16 @@ function render() {
   renderer.render(scene, camera);
 }
 
-function updateRectangularBuilding(building, val) {
+function stretchRectangularBuilding(building, val) {
   // indices on edge geometry of top y value
-  var indices = [1,7,10,19,25,31,34,43,49,52,55,58];
+  var indices = [4,16,19,22,28,37,40,46,55,58,67,70];
   for (var i=0; i<indices.length; i++) {
     var index = indices[i];
     building.edges.geometry.attributes.position.array[index] = val;
   }
   building.edges.geometry.attributes.position.needsUpdate = true;
 
-  var indices = [0,1,4,5];
+  var indices = [4,5,6,7];
   for(var i=0; i<indices.length; i++) {
     var index = indices[i];
     building.inner.geometry.vertices[index].y = val;
@@ -233,11 +266,52 @@ function updateRectangularBuilding(building, val) {
   building.inner.geometry.verticesNeedUpdate = true;
 }
 
-function updateBuildings(array) {
-  for(var i=0; i<cubeBuildings.length; i++) {
-    var val = array[cubeBuildings[i].data.frequency]/8 + cubeBuildings[i].data.dimensions[1]/2;
-    updateRectangularBuilding(cubeBuildings[i].building, val)
+function stretchPyramidBuilding(building, val) {
+  // indices on edge geometry of top y value
+  var indices = [4,10,22,34];
+  for (var i=0; i<indices.length; i++) {
+    var index = indices[i];
+    building.edges.geometry.attributes.position.array[index] = val;
   }
+  building.edges.geometry.attributes.position.needsUpdate = true;
+
+  building.inner.geometry.vertices[4].y = val;
+  building.inner.geometry.verticesNeedUpdate = true;
+}
+
+function moveBuilding(building, val) {
+  // translateZ instead
+  building.edges.position.set(0,val,0);
+  building.inner.position.set(0,val,0);
+}
+
+function updateBuildings(array) {
+  for(var i=0; i<buildings.length; i++) {
+    var val = array[buildings[i].data.frequency]/8;
+    if (buildings[i].data.move == "bouncy") {
+      moveBuilding(buildings[i], val);
+    } else if (buildings[i].data.shape == "cube" || buildings[i].data.shape == "frustum") {
+      stretchRectangularBuilding(buildings[i], val + buildings[i].data.dimensions[1]);
+    } else if (buildings[i].data.shape == "pyramid") {
+      stretchPyramidBuilding(buildings[i], val + buildings[i].data.dimensions[1]);
+    }
+  }
+  // // cube Buildings stretch up
+  // for(var i=0; i<cubeBuildings.length; i++) {
+  //   var val = array[cubeBuildings[i].data.frequency]/8 + cubeBuildings[i].data.dimensions[1]/2;
+  //   stretchRectangularBuilding(cubeBuildings[i].building, val);
+  // }
+
+  // pyramid buildings move up (not stretch)
+  // for(var i=0; i<pyramidBuildings.length; i++) {
+  //   var val = array[pyramidBuildings[i].data.frequency]/8;
+  //   if (pyramidBuildings[i].data.move=="stretchy") {
+  //     stretchPyramidBuilding(building, val + pyramidBuildings[i].data.dimensions[1]/2);
+  //   } else {
+  //
+  //     moveBuilding(pyramidBuildings[i].building, val);
+  //   }
+  // }
   // updateRectangularBuilding(building1, 5 + array[350]/8);
   // updateRectangularBuilding(building2, 5 + array[330]/8);
   // updateRectangularBuilding(building3, 6 + array[280]/8);
