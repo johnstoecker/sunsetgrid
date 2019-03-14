@@ -116,61 +116,93 @@ scene.add(sunOccluder);
 
 // move -- stretchy stretches from y=0 to the beat. bouncy just moves up and down to the beat (stays the same size)
 // cubes, pyramids, frustums (pyramid with flat top)
+// ah, right they aren't cubes, but rather rectangular prisms
 var buildingData = [
   {
-    dimensions: [5,10,5],position: [68,5,-90],color: 0xff0000,frequency:350,shape:"cube",move:"stretchy"
+    dimensions: [5,10,5],position: [68,5,-90],color: 0xFF6C11,frequency:350,shape:"cube",move:"stretchy"
   },{
-    dimensions: [5,10,5],position: [63,5,-90],color: 0xffff00,frequency:330,shape:"cube",move:"stretchy"
+    dimensions: [5,10,5],position: [63,5,-90],color: 0xFF3864,frequency:330,shape:"cube",move:"stretchy"
   },{
-    dimensions: [4,12,4],position: [58,6,-90],color: 0xff00ff,frequency:280,shape:"cube",move:"stretchy"
+    dimensions: [4,12,4],position: [58,6,-90],color: 0x2DE2E6,frequency:280,shape:"cube",move:"stretchy"
   },{
-    dimensions: [2,2,2],position: [58,13,-90],color: 0xff00ff,frequency:280,shape:"cube",move:"bouncy"
+    dimensions: [2,2,2],position: [58,13,-90],color: 0x2DE2E6,frequency:280,shape:"cube",move:"bouncy"
   },{
-    dimensions: [4,4,4],position: [54,2,-90],color: 0x00ffff,frequency:250,shape:"cube",move:"stretchy"
-  },{
-    dimensions: [6,14,6],position: [44,7,-90],color: 0xfff000,frequency:220,shape:"cube",move:"stretchy"
-  },{
-    dimensions: [2,8,2],position: [38,4,-90],color: 0xfff000,frequency:200,shape:"cube",move:"stretchy"
-  },{
-    dimensions: [3,12,3],position: [36,6,-90],color: 0xff0f00,frequency:190,shape:"cube",move:"stretchy"
-  },{
-    dimensions: [4,6,4],position: [32,3,-90],color: 0xff00ff,frequency:180,shape:"cube",move:"stretchy"
-  },{
-    dimensions: [3,4,3],position: [32,8,-90],color: 0xff00ff,frequency:180,shape:"cube",move:"bouncy"
-  },{
-    dimensions: [1,2,1],position: [32,11,-90],color: 0xff00ff,frequency:180,shape:"cube",move:"bouncy"
-  },{
-    dimensions: [10,8,10],position: [25,4,-90],color: 0xff00ff,frequency:170,shape:"cube",move:"stretchy"
-  },{
-    dimensions: [8,2,8],position: [25,9,-90],color: 0xff00ff,frequency:170,shape:"cube",move:"bouncy"
-  },{
-    dimensions: [4,18,8],position: [18,9,-90],color: 0xff00ff,frequency:160,shape:"cube",move:"stretchy"
-  },{
-    dimensions: [6,12,6],position: [12,6,-90],color: 0xff00ff,frequency:140,shape:"cube",move:"stretchy"
+    dimensions: [4,4,4],position: [54,2,-90],color: 0x023788,frequency:250,shape:"cube",move:"stretchy"
   }, {
-    dimensions: [4,8,4], position: [54,8, -90], color: 0x00ffff, frequency: 250, shape:"pyramid",move:"bouncy"
+    dimensions: [4,8,4], position: [54,8, -90], color: 0x023788, frequency: 250, shape:"pyramid",move:"bouncy"
+  },{
+    dimensions: [6,14,6],position: [44,7,-90],color: 0x650D89,frequency:220,shape:"cube",move:"stretchy"
+  },{
+    dimensions: [2,8,2],position: [38,4,-90],color: 0x920075,frequency:200,shape:"cube",move:"stretchy"
+  },{
+    dimensions: [3,12,3],position: [36,6,-90],color: 0xF6019D,frequency:190,shape:"cube",move:"stretchy"
+  },{
+    dimensions: [4,6,4],position: [32,3,-90],color: 0xD40078,frequency:180,shape:"cube",move:"stretchy"
+  },{
+    dimensions: [3,4,3],position: [32,8,-90],color: 0xD40078,frequency:180,shape:"cube",move:"bouncy"
+  },{
+    dimensions: [1,2,1],position: [32,11,-90],color: 0xD40078,frequency:180,shape:"cube",move:"bouncy"
+  },{
+    dimensions: [10,8,10],position: [25,4,-90],color: 0xFD3777,frequency:170,shape:"cube",move:"stretchy"
+  },{
+    dimensions: [8,2,8],position: [25,9,-90],color: 0xFD3777,frequency:170,shape:"cube",move:"bouncy"
+  },{
+    dimensions: [4,18,8],position: [18,9,-90],color: 0xF706CF,frequency:160,shape:"cube",move:"stretchy"
+  },{
+    dimensions: [6,12,6],position: [12,6,-90],color: 0xFD1D53,frequency:140,shape:"cube",move:"stretchy"
   }, {
-    dimensions: [6,10,6,4,4], position: [6,5, -90], color: 0x00ffff, frequency: 130, shape:"frustum",move:"stretchy"
+    // middle double tower
+    dimensions: [6,10,6,4,4], position: [6,5, -90], color: 0xF9C80E, frequency: 130, shape:"frustum",move:"stretchy"
   }, {
-    dimensions: [6,10,6,4,4], position: [-6,5, -90], color: 0x00ffff, frequency: 130, shape:"frustum",move:"stretchy"
+    dimensions: [6,10,6,4,4], position: [-6,5, -90], color: 0xF9C80E, frequency: 130, shape:"frustum",move:"stretchy"
   }, {
-    dimensions: [12,2,2], position: [0,6, -90], color: 0x00ffff, frequency: 130, shape:"cube",move:"bouncy"
+    dimensions: [12,2,2], position: [0,6, -90], color: 0xF9C80E, frequency: 130, shape:"cube",move:"bouncy"
   }, {
-    dimensions: [8,18,8], position: [-18,8, -90], color: 0x00ffff, frequency: 120, shape:"pyramid",move:"stretchy"
+    dimensions: [8,18,8], position: [-18,8, -90], color: 0xFF4365, frequency: 120, shape:"pyramid",move:"stretchy"
+  }, {
+    dimensions: [4,9,4], position: [-14,4.5, -90], color: 0xFF4365, frequency: 120, shape:"pyramid",move:"stretchy"
+  }, {
+    dimensions: [4,9,4], position: [-22,4.5, -90], color: 0xFF4365, frequency: 120, shape:"pyramid",move:"stretchy"
+
+// second row
+  },{
+    dimensions: [4,2,4],position: [68,1,-80],color: 0xD40078,shape:"cube"
+  },{
+    dimensions: [6,4,6],position: [63,2,-80],color: 0xFF3864,shape:"cube"
+  },{
+    dimensions: [4,5,4],position: [58,2.5,-80],color: 0xF706CF,shape:"cube"
+  },{
+    dimensions: [4,4,4],position: [54,2,-80],color: 0x541388,shape:"pyramid"
+  },{
+    dimensions: [1,5,1],position: [51.5,2.5,-80],color: 0x791E94,shape:"cube"
+  },{
+    dimensions: [3,4,3],position: [49.5,2,-80],color: 0xD40078,shape:"cube"
+  },{
+    dimensions: [6,8,6],position: [45,4,-80],color: 0xF706CF,shape:"cube"
+  },{
+    dimensions: [6,3,6],position: [45,9.5,-80],color: 0xF706CF,shape:"pyramid"
+  },{
+    dimensions: [4,6,4],position: [40,3,-80],color: 0x023788,shape:"cube"
+  },{
+    dimensions: [2,4,4],position: [37,2,-80],color: 0xD40078,shape:"cube"
+  },{
+    dimensions: [4,5,4],position: [34,2.5,-80],color: 0x540D6E,shape:"cube"
+  },{
+    dimensions: [7,7,4],position: [28.5,3.5,-80],color: 0xF6019D,shape:"cube"
+  },{
+    dimensions: [1,2,1],position: [26.5,8,-80],color: 0xF6019D,shape:"cube"
+  },{
+    dimensions: [1,2,1],position: [30.5,8,-80],color: 0xF6019D,shape:"cube"
+  },{
+    dimensions: [4,6,4],position: [23,3,-80],color: 0xF6019D,shape:"cube"
+  },{
+    dimensions: [3,3,3,2,2],position: [19.5,1.5,-80],color: 0x540D6E,shape:"frustum"
   }
 ]
 
-// var cubeBuildings = [];
-// for(var i=0; i<cubeBuildingData.length; i++) {
-//   var building = Building.createCube(cubeBuildingData[i].dimensions,cubeBuildingData[i].position, cubeBuildingData[i].color)
-//   scene.add(building.edges);
-//   scene.add(building.inner);
-//   cubeBuildings.push({
-//     building: building,
-//     data: cubeBuildingData[i]
-//   })
-// }
-
+// 540D6E
+// 791E94
+// 541388
 
 var buildings = [];
 for(var i=0; i<buildingData.length; i++) {
@@ -180,20 +212,6 @@ for(var i=0; i<buildingData.length; i++) {
   buildings.push(building);
 }
 window.buildings = buildings;
-
-// var pyramidBuildings = []
-// for(var i=0; i<pyramidBuildingData.length; i++) {
-//   var building = Building.createPyramid(pyramidBuildingData[i].dimensions,pyramidBuildingData[i].position, pyramidBuildingData[i].color);
-//   scene.add(building.edges);
-//   scene.add(building.inner);
-//   pyramidBuildings.push({
-//     building: building,
-//     data: pyramidBuildingData[i]
-//   });
-// }
-// window.pyramidBuildings = pyramidBuildings;
-
-
 
 // var hemLight = new THREE.HemisphereLight( 0xff0000, 0x0000ff, 1 );
 // scene.add( hemLight );
@@ -290,34 +308,12 @@ function updateBuildings(array) {
     var val = array[buildings[i].data.frequency]/8;
     if (buildings[i].data.move == "bouncy") {
       moveBuilding(buildings[i], val);
-    } else if (buildings[i].data.shape == "cube" || buildings[i].data.shape == "frustum") {
+    } else if (buildings[i].data.move=="stretchy" && (buildings[i].data.shape == "cube" || buildings[i].data.shape == "frustum")) {
       stretchRectangularBuilding(buildings[i], val + buildings[i].data.dimensions[1]);
-    } else if (buildings[i].data.shape == "pyramid") {
+    } else if (buildings[i].data.move == "stretchy" && (buildings[i].data.shape == "pyramid")) {
       stretchPyramidBuilding(buildings[i], val + buildings[i].data.dimensions[1]);
     }
   }
-  // // cube Buildings stretch up
-  // for(var i=0; i<cubeBuildings.length; i++) {
-  //   var val = array[cubeBuildings[i].data.frequency]/8 + cubeBuildings[i].data.dimensions[1]/2;
-  //   stretchRectangularBuilding(cubeBuildings[i].building, val);
-  // }
-
-  // pyramid buildings move up (not stretch)
-  // for(var i=0; i<pyramidBuildings.length; i++) {
-  //   var val = array[pyramidBuildings[i].data.frequency]/8;
-  //   if (pyramidBuildings[i].data.move=="stretchy") {
-  //     stretchPyramidBuilding(building, val + pyramidBuildings[i].data.dimensions[1]/2);
-  //   } else {
-  //
-  //     moveBuilding(pyramidBuildings[i].building, val);
-  //   }
-  // }
-  // updateRectangularBuilding(building1, 5 + array[350]/8);
-  // updateRectangularBuilding(building2, 5 + array[330]/8);
-  // updateRectangularBuilding(building3, 6 + array[280]/8);
-  // updateRectangularBuilding(building3Top, 1 + array[280]/8);
-  // updateRectangularBuilding(building4, 2 + array[250]/8);
-
 }
 
 
