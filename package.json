@@ -25,6 +25,7 @@
     "webpack-dev-server": "^3.1.14"
   },
   "dependencies": {
+    "realtime-bpm-analyzer": "^1.1.0",
     "three": "^0.101.0"
   }
 }

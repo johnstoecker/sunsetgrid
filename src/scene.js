@@ -152,17 +152,35 @@ var buildingData = [
     dimensions: [6,12,6],position: [12,6,-90],color: 0xFD1D53,frequency:140,shape:"cube",move:"stretchy"
   }, {
     // middle double tower
-    dimensions: [6,10,6,4,4], position: [6,5, -90], color: 0xF9C80E, frequency: 130, shape:"frustum",move:"stretchy"
+    dimensions: [6,10,6,4,4], position: [6,5, -90], color: 0xF9C80E, frequency: 110, shape:"frustum",move:"stretchy"
   }, {
-    dimensions: [6,10,6,4,4], position: [-6,5, -90], color: 0xF9C80E, frequency: 130, shape:"frustum",move:"stretchy"
+    dimensions: [6,10,6,4,4], position: [-6,5, -90], color: 0xF9C80E, frequency: 110, shape:"frustum",move:"stretchy"
   }, {
-    dimensions: [12,2,2], position: [0,6, -90], color: 0xF9C80E, frequency: 130, shape:"cube",move:"bouncy"
+    dimensions: [12,2,2], position: [0,6, -90], color: 0xF9C80E, frequency: 110, shape:"cube",move:"bouncy"
   }, {
-    dimensions: [8,18,8], position: [-18,8, -90], color: 0xFF4365, frequency: 120, shape:"pyramid",move:"stretchy"
+    dimensions: [8,18,8], position: [-18,8, -90], color: 0xFF4365, frequency: 90, shape:"pyramid",move:"stretchy"
   }, {
-    dimensions: [4,9,4], position: [-14,4.5, -90], color: 0xFF4365, frequency: 120, shape:"pyramid",move:"stretchy"
+    dimensions: [4,9,4], position: [-14,4.5, -90], color: 0xFF4365, frequency: 90, shape:"pyramid",move:"stretchy"
   }, {
-    dimensions: [4,9,4], position: [-22,4.5, -90], color: 0xFF4365, frequency: 120, shape:"pyramid",move:"stretchy"
+    dimensions: [4,9,4], position: [-22,4.5, -90], color: 0xFF4365, frequency: 90, shape:"pyramid",move:"stretchy"
+  },{
+    dimensions: [4,12,4],position: [-26,6,-90],color: 0xF706CF,frequency:70,shape:"cube",move:"stretchy"
+  },{
+    dimensions: [2,2,2],position: [-26,13,-90],color: 0xF706CF,frequency:70,shape:"cube",move:"bouncy"
+  },{
+    dimensions: [6,14,6],position: [-31,7,-90],color: 0xF9C80E,frequency:50,shape:"cube",move:"stretchy"
+  },{
+    dimensions: [5,11,5],position: [-36.5,5.5,-90],color: 0xFD3777,frequency:30,shape:"cube",move:"stretchy",divisor:10
+  }, {
+    dimensions: [5,2,5], position: [-36.5,12, -90], color: 0xFD3777, frequency: 30, shape:"pyramid",move:"bouncy",divisor:10
+  },{
+    dimensions: [6,14,6],position: [-42,7,-90],color: 0x540D6E,frequency:15,shape:"cube",move:"stretchy",divisor:10
+  },{
+    dimensions: [8,11,8],position: [-49,5.5,-90],color: 0xF6019D,frequency:2,shape:"cube",move:"stretchy",divisor:12
+  },{
+    dimensions: [1,3,1],position: [-47,12.5,-90],color: 0xF6019D,frequency:2,shape:"cube",move:"bouncy",divisor:12
+  },{
+    dimensions: [1,3,1],position: [-51,12.5,-90],color: 0xF6019D,frequency:2,shape:"cube",move:"bouncy",divisor:12
 
 // second row
   },{
@@ -197,6 +215,53 @@ var buildingData = [
     dimensions: [4,6,4],position: [23,3,-80],color: 0xF6019D,shape:"cube"
   },{
     dimensions: [3,3,3,2,2],position: [19.5,1.5,-80],color: 0x540D6E,shape:"frustum"
+  },{
+    dimensions: [4,8,6],position: [15,4,-80],color: 0x2DE2E6,shape:"pyramid"
+  },{
+    dimensions: [4,2,4],position: [11,1,-80],color: 0xD40078,shape:"cube"
+  },{
+    dimensions: [4,6,4,2,2],position: [11,5,-80],color: 0xD40078,shape:"frustum"
+  },{
+    dimensions: [7,3,7],position: [5.5,1.5,-80],color: 0x541388,shape:"cube"
+  },{
+    dimensions: [4,1,4],position: [5.5,3.5,-80],color: 0x541388,shape:"cube"
+  },{
+    dimensions: [3,4,3],position: [-3.5,2,-80],color: 0x791E94,shape:"cube"
+  },{
+    dimensions: [3,3,3],position: [-3.5,5.5,-80],color: 0x791E94,shape:"pyramid"
+
+  },{
+    dimensions: [4,5,4],position: [-7,2.5,-80],color: 0xF706CF,shape:"cube"
+  },{
+    dimensions: [1,5,1],position: [-9.5,2.5,-80],color: 0x791E94,shape:"cube"
+  },{
+    dimensions: [4,2,4],position: [-12,1,-80],color: 0xD40078,shape:"cube"
+  },{
+    dimensions: [4,4,4],position: [-16,2,-80],color: 0x541388,shape:"pyramid"
+  },{
+    dimensions: [6,4,6],position: [-21,2,-80],color: 0xFF3864,shape:"cube"
+
+
+  },{
+    dimensions: [7,7,4],position: [-27.5,3.5,-80],color: 0xF6019D,shape:"cube"
+  },{
+    dimensions: [1,2,1],position: [-25.5,8,-80],color: 0xF6019D,shape:"cube"
+  },{
+    dimensions: [1,2,1],position: [-29.5,8,-80],color: 0xF6019D,shape:"cube"
+  },{
+    dimensions: [2,4,4],position: [-32,2,-80],color: 0xD40078,shape:"cube"
+  },{
+    dimensions: [4,6,4],position: [-35,3,-80],color: 0xF6019D,shape:"cube"
+  },{
+    dimensions: [3,3,3,2,2],position: [-38.5,1.5,-80],color: 0x540D6E,shape:"frustum"
+  },{
+    dimensions: [4,5,4],position: [-42,2.5,-80],color: 0x540D6E,shape:"cube"
+  },{
+    dimensions: [4,8,6],position: [-46,4,-80],color: 0x2DE2E6,shape:"pyramid"
+  },{
+    dimensions: [4,6,4,2,2],position: [-48,3,-80],color: 0xD40078,shape:"frustum"
+
+
   }
 ]
 
@@ -233,8 +298,11 @@ scene.add( light );
 var clock = new THREE.Clock();
 var time = 0;
 var count = 0;
-var volumeAverages = [50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50];
+var volumeAverages = [50,50,50,50,50,50,50,50];
+window.volumeAverages = volumeAverages;
 var lastBurst = -1;
+var lastBurstTime = -1;
+var lastBeatTime = -1;
 
 render();
 
@@ -244,20 +312,26 @@ function render() {
   if (window.sunsetAnalyzer) {
     var array =  new Uint8Array(window.sunsetAnalyzer.frequencyBinCount);
     window.sunsetAnalyzer.getByteFrequencyData(array);
-    var averageVolume = getAverageVolume(array, 80);
+    var averageVolume = getAverageVolume(array, 8);
     // drop other frequencies, only care about bass
     volumeAverages.push(averageVolume);
     var movingAverageVolume = getAverageVolume(volumeAverages, volumeAverages.length);
     // every 3 ticks, update the ~mountains~ buildings
     if (count % 3 == 0) {
       updateBuildings(array);
+      // console.log("ave: "+ averageVolume + " moving: " + movingAverageVolume);
     }
-    if (averageVolume > 20 && averageVolume > 1.25 * movingAverageVolume && lastBurst == -1) {
-      lastBurst = count;
+    if (averageVolume > 20 && averageVolume > 1.08 * movingAverageVolume && time - lastBurstTime > 0.5) {
+      console.log('burst');
+      spawnDolphin();
+      // lastBurst = count;
+      lastBurstTime = time;
+      lastBeatTime = time;
       doBurst();
-    }
-    if (count - lastBurst > 15) {
-      lastBurst = -1;
+    } else if (averageVolume > 20 && time - lastBeatTime > window.currentBeatDelta) {
+      console.log('beat');
+      doBurst();
+      lastBeatTime = time;
     }
     volumeAverages.shift()
   }
@@ -305,7 +379,7 @@ function moveBuilding(building, val) {
 
 function updateBuildings(array) {
   for(var i=0; i<buildings.length; i++) {
-    var val = array[buildings[i].data.frequency]/8;
+    var val = array[buildings[i].data.frequency]/(buildings[i].data.divisor || 8);
     if (buildings[i].data.move == "bouncy") {
       moveBuilding(buildings[i], val);
     } else if (buildings[i].data.move=="stretchy" && (buildings[i].data.shape == "cube" || buildings[i].data.shape == "frustum")) {

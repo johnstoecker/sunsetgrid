@@ -1,3 +1,5 @@
+var RealTimeBPMAnalyzer = require('realtime-bpm-analyzer');
+
 var sunsetAudio = {
   paused: false,
   audio: undefined,
@@ -74,17 +76,20 @@ function playPause() {
 function stopStream() {
    var elem = document.getElementById("radioStream");
    return elem.parentNode.removeChild(elem);
+   sunsetAudio.scriptProcessorNode.disconnect(sunsetAudio.audioContext.destination);
    delete sunsetAudio.audio;
    delete sunsetAudio.audioContext;
    delete sunsetAudio.mediaElementSource;
    delete sunsetAudio.analyzer;
    delete sunsetAudio.analyzerBytes;
+   delete sunsetAudio.scriptProcessorNode;
 }
 
 function startStream() {
   // // Create a new instance of an audio object and adjust some of its properties
   sunsetAudio.audio = new Audio();
-  sunsetAudio.audio.src = streams[currentStreamIndex].src
+  sunsetAudio.audio.src = streams[currentStreamIndex].src;
+  console.log("loading " + streams[currentStreamIndex].details);
   sunsetAudio.audio.crossOrigin = "anonymous";
   sunsetAudio.audio.controls = false;
   sunsetAudio.audio.style.position = "absolute"
@@ -96,7 +101,7 @@ function startStream() {
   sunsetAudio.audioContext = new AudioContext();
   sunsetAudio.mediaElementSource = sunsetAudio.audioContext.createMediaElementSource(sunsetAudio.audio);
   sunsetAudio.analyzer = sunsetAudio.audioContext.createAnalyser();
-  sunsetAudio.analyzer.smoothingTimeConstant = 0.3;
+  sunsetAudio.analyzer.smoothingTimeConstant = 0.1;
   sunsetAudio.analyzer.fftSize = 1024;
 
   sunsetAudio.mediaElementSource.connect(sunsetAudio.analyzer);
@@ -104,9 +109,45 @@ function startStream() {
   sunsetAudio.analyzerBytes = new Uint8Array(sunsetAudio.analyzer.frequencyBinCount);
   sunsetAudio.audio.play();
 
-  window.sunsetAnalyzer = sunsetAudio.analyzer
-}
 
+
+
+  // Create new instance of AudioContext
+  // var audioContext = new AudioContext();
+  // Set the source with the HTML Audio Node
+  // var source = audioContext.createMediaElementSource(document.getElementById('track'));
+  // Set the scriptProcessorNode to get PCM data in real time
+  sunsetAudio.scriptProcessorNode = sunsetAudio.audioContext.createScriptProcessor(4096, 1, 1);
+  // Connect everythings together
+  sunsetAudio.scriptProcessorNode.connect(sunsetAudio.audioContext.destination);
+  sunsetAudio.mediaElementSource.connect(sunsetAudio.scriptProcessorNode);
+  sunsetAudio.mediaElementSource.connect(sunsetAudio.audioContext.destination);
+
+  var onAudioProcess = new RealTimeBPMAnalyzer({
+      scriptNode: {
+          bufferSize: 4096,
+          numberOfInputChannels: 1,
+          numberOfOutputChannels: 1
+      },
+      pushTime: 10000,
+      pushCallback: function (err, bpm) {
+          console.log('bpm', bpm);
+          if (bpm && bpm[0].count < 100) {
+            var currentBPM = bpm[0].tempo;
+            window.currentBeatDelta = 60.0/currentBPM;
+          }
+      }
+  });
+  // Attach realTime function to audioprocess event.inputBuffer (AudioBuffer)
+  sunsetAudio.scriptProcessorNode.onaudioprocess = function (e) {
+      onAudioProcess.analyze(e);
+  };
+
+
+
+  window.sunsetAnalyzer = sunsetAudio.analyzer
+  console.log(sunsetAudio.audioContext.sampleRate);
+}
 
 export default {
   sunsetAudio: sunsetAudio,
