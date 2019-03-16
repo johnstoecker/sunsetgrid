@@ -170,17 +170,17 @@ var buildingData = [
   },{
     dimensions: [6,14,6],position: [-31,7,-90],color: 0xF9C80E,frequency:50,shape:"cube",move:"stretchy"
   },{
-    dimensions: [5,11,5],position: [-36.5,5.5,-90],color: 0xFD3777,frequency:30,shape:"cube",move:"stretchy",divisor:10
+    dimensions: [5,11,5],position: [-36.5,5.5,-90],color: 0xFD3777,frequency:35,shape:"cube",move:"stretchy",divisor:10
   }, {
-    dimensions: [5,2,5], position: [-36.5,12, -90], color: 0xFD3777, frequency: 30, shape:"pyramid",move:"bouncy",divisor:10
+    dimensions: [5,2,5], position: [-36.5,12, -90], color: 0xFD3777, frequency: 35, shape:"pyramid",move:"bouncy",divisor:10
   },{
-    dimensions: [6,14,6],position: [-42,7,-90],color: 0x540D6E,frequency:15,shape:"cube",move:"stretchy",divisor:10
+    dimensions: [6,14,6],position: [-42,7,-90],color: 0x540D6E,frequency:25,shape:"cube",move:"stretchy",divisor:10
   },{
-    dimensions: [8,11,8],position: [-49,5.5,-90],color: 0xF6019D,frequency:2,shape:"cube",move:"stretchy",divisor:12
+    dimensions: [8,11,8],position: [-49,5.5,-90],color: 0xF6019D,frequency:15,shape:"cube",move:"stretchy",divisor:12
   },{
-    dimensions: [1,3,1],position: [-47,12.5,-90],color: 0xF6019D,frequency:2,shape:"cube",move:"bouncy",divisor:12
+    dimensions: [1,3,1],position: [-47,12.5,-90],color: 0xF6019D,frequency:15,shape:"cube",move:"bouncy",divisor:12
   },{
-    dimensions: [1,3,1],position: [-51,12.5,-90],color: 0xF6019D,frequency:2,shape:"cube",move:"bouncy",divisor:12
+    dimensions: [1,3,1],position: [-51,12.5,-90],color: 0xF6019D,frequency:15,shape:"cube",move:"bouncy",divisor:12
 
 // second row
   },{
@@ -319,6 +319,7 @@ function render() {
     // every 3 ticks, update the ~mountains~ buildings
     if (count % 3 == 0) {
       updateBuildings(array);
+      // updateMountains(array);
       // console.log("ave: "+ averageVolume + " moving: " + movingAverageVolume);
     }
     if (averageVolume > 20 && averageVolume > 1.08 * movingAverageVolume && time - lastBurstTime > 0.5) {
@@ -392,21 +393,21 @@ function updateBuildings(array) {
 
 
 function updateMountains(array) {
-  // mountains.geometry.vertices[1].y = 20 + array[350]/15;
-  // mountains.geometry.vertices[4].y = 5 + array[330]/25;
-  // mountains.geometry.vertices[5].y = 12 + array[280]/15;
-  // mountains.geometry.vertices[6].y = 2 + array[280]/25;
-  // mountains.geometry.vertices[7].y = 16 + array[210]/15;
-  // // mountains.geometry.vertices[13].y = 3 + array[170]/45;
-  // mountains.geometry.vertices[17].y = 13 + array[170]/15;
-  // mountains.geometry.vertices[18].y = 10 + array[170]/25;
-  // mountains.geometry.vertices[19].y = 18 + array[160]/15;
-  // mountains.geometry.vertices[20].y = 19 + array[140]/15;
-  // mountains.geometry.vertices[21].y = 5 + array[130]/25;
-  // mountains.geometry.vertices[22].y = 22 + array[120]/15;
-  // mountains.geometry.vertices[23].y = 6 + array[110]/35;
-  //
-  // mountains.geometry.verticesNeedUpdate = true;
+  mountains.geometry.vertices[1].y = 20 + array[350]/15;
+  mountains.geometry.vertices[4].y = 5 + array[330]/25;
+  mountains.geometry.vertices[5].y = 12 + array[280]/15;
+  mountains.geometry.vertices[6].y = 2 + array[280]/25;
+  mountains.geometry.vertices[7].y = 16 + array[210]/15;
+  // mountains.geometry.vertices[13].y = 3 + array[170]/45;
+  mountains.geometry.vertices[17].y = 13 + array[170]/15;
+  mountains.geometry.vertices[18].y = 10 + array[170]/25;
+  mountains.geometry.vertices[19].y = 18 + array[160]/15;
+  mountains.geometry.vertices[20].y = 19 + array[140]/15;
+  mountains.geometry.vertices[21].y = 5 + array[130]/25;
+  mountains.geometry.vertices[22].y = 22 + array[120]/15;
+  mountains.geometry.vertices[23].y = 6 + array[110]/35;
+
+  mountains.geometry.verticesNeedUpdate = true;
 }
 
 function doBurst() {
