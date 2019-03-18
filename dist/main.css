@@ -1,5 +1,23 @@
+/* $purple = #5c2686;
+$pink = ff1690;
+$darkpurple = $1c0658; */
 body {
-  magin: 0;
+  margin: 0;
+  background-color: #5c2686;
+  background-image: -webkit-gradient(linear, top, bottom, from(#1c0658), to(#ff1690));
+  background-image: -webkit-linear-gradient(top, #1c0658, #ff1690);
+  background-image: -moz-linear-gradient(top, #1c0658, #ff1690);
+  background-image: -o-linear-gradient(top, #1c0658, #ff1690);
+  background-image: linear-gradient(to bottom, #1c0658, #ff1690);
+  overflow: hidden;
+  font-family: sans-serif;
+
+}
+
+.station {
+  display: flex;
+  align-self: center;
+  color: #5c2686;
 }
 
 canvas {
@@ -20,4 +38,10 @@ canvas {
 
 #pauseButton {
   display: none;
+}
+
+@media only screen and (max-width: 760px) {
+  .console input {
+    height: 100px;
+  }
 }

@@ -7,7 +7,7 @@ var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
 camera.position.set(0, 10, 50);
 camera.lookAt(scene.position);
-var renderer = new THREE.WebGLRenderer();
+var renderer = new THREE.WebGLRenderer({ alpha: true });// THREE.CanvasRenderer({ alpha: true } );
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 // useful for checking how many calls/frame -- renderer.info
@@ -75,6 +75,23 @@ grid.material = new THREE.ShaderMaterial({
 
 scene.add(grid);
 
+
+
+var gridBaseGeometry = new THREE.BufferGeometry();
+
+var vertices = new Float32Array( [
+  -110,-1,50,  110,-1,-112,   -110,-1,-112,
+  -110,-1,50,  110,-1,40,     110, -1, -112
+]);
+gridBaseGeometry.addAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
+var innerMaterial = new THREE.MeshBasicMaterial( {
+    color: 0x000000
+} );
+
+var gridBase = new THREE.Mesh( gridBaseGeometry, innerMaterial );
+scene.add(gridBase);
+window.gridBase = gridBase;
+
 // add gradient for the sun
 var uniforms = {
   "color1" : {
@@ -109,10 +126,9 @@ circle.position.set(0,9,-110)
 scene.add( circle );
 
 var mountains = Mountains.createMountains();
-var sunOccluder = Mountains.createSunOccluder();
-scene.add(mountains);
-scene.add(sunOccluder);
-
+// var sunOccluder = Mountains.createSunOccluder();
+scene.add(mountains.edges);
+scene.add(mountains.inner);
 
 // move -- stretchy stretches from y=0 to the beat. bouncy just moves up and down to the beat (stays the same size)
 // cubes, pyramids, frustums (pyramid with flat top)
@@ -260,8 +276,6 @@ var buildingData = [
     dimensions: [4,8,6],position: [-46,4,-80],color: 0x2DE2E6,shape:"pyramid"
   },{
     dimensions: [4,6,4,2,2],position: [-48,3,-80],color: 0xD40078,shape:"frustum"
-
-
   }
 ]
 
@@ -344,32 +358,37 @@ function render() {
 
 function stretchRectangularBuilding(building, val) {
   // indices on edge geometry of top y value
-  var indices = [4,16,19,22,28,37,40,46,55,58,67,70];
+  var indices = [1,16,19,22,28,37,40,46,55,58,67,70];
   for (var i=0; i<indices.length; i++) {
     var index = indices[i];
     building.edges.geometry.attributes.position.array[index] = val;
   }
   building.edges.geometry.attributes.position.needsUpdate = true;
 
-  var indices = [4,5,6,7];
+  var innerIndices = [4,13,16,22,31,34,40,49,52,58,67,70,73,76,79,82,85,88]
+  // var indices = [4,5,6,7];
   for(var i=0; i<indices.length; i++) {
-    var index = indices[i];
-    building.inner.geometry.vertices[index].y = val;
+    var index = innerIndices[i];
+    building.inner.geometry.attributes.position.array[index] = val;
   }
-  building.inner.geometry.verticesNeedUpdate = true;
+  building.edges.geometry.attributes.position.needsUpdate = true;
+  building.inner.geometry.attributes.position.needsUpdate = true;
 }
 
 function stretchPyramidBuilding(building, val) {
   // indices on edge geometry of top y value
-  var indices = [4,10,22,34];
+  var indices = [4,7,19,31];
   for (var i=0; i<indices.length; i++) {
     var index = indices[i];
     building.edges.geometry.attributes.position.array[index] = val;
   }
+  var innerIndices = [4,13,22,31];
+  for (var i=0; i<indices.length; i++) {
+    var index = innerIndices[i];
+    building.inner.geometry.attributes.position.array[index] = val;
+  }
   building.edges.geometry.attributes.position.needsUpdate = true;
-
-  building.inner.geometry.vertices[4].y = val;
-  building.inner.geometry.verticesNeedUpdate = true;
+  building.inner.geometry.attributes.position.needsUpdate = true;
 }
 
 function moveBuilding(building, val) {
@@ -393,21 +412,21 @@ function updateBuildings(array) {
 
 
 function updateMountains(array) {
-  mountains.geometry.vertices[1].y = 20 + array[350]/15;
-  mountains.geometry.vertices[4].y = 5 + array[330]/25;
-  mountains.geometry.vertices[5].y = 12 + array[280]/15;
-  mountains.geometry.vertices[6].y = 2 + array[280]/25;
-  mountains.geometry.vertices[7].y = 16 + array[210]/15;
+  // mountains.geometry.vertices[1].y = 20 + array[350]/15;
+  // mountains.geometry.vertices[4].y = 5 + array[330]/25;
+  // mountains.geometry.vertices[5].y = 12 + array[280]/15;
+  // mountains.geometry.vertices[6].y = 2 + array[280]/25;
+  // mountains.geometry.vertices[7].y = 16 + array[210]/15;
   // mountains.geometry.vertices[13].y = 3 + array[170]/45;
-  mountains.geometry.vertices[17].y = 13 + array[170]/15;
-  mountains.geometry.vertices[18].y = 10 + array[170]/25;
-  mountains.geometry.vertices[19].y = 18 + array[160]/15;
-  mountains.geometry.vertices[20].y = 19 + array[140]/15;
-  mountains.geometry.vertices[21].y = 5 + array[130]/25;
-  mountains.geometry.vertices[22].y = 22 + array[120]/15;
-  mountains.geometry.vertices[23].y = 6 + array[110]/35;
+  // mountains.geometry.vertices[17].y = 13 + array[170]/15;
+  // mountains.geometry.vertices[18].y = 10 + array[170]/25;
+  // mountains.geometry.vertices[19].y = 18 + array[160]/15;
+  // mountains.geometry.vertices[20].y = 19 + array[140]/15;
+  // mountains.geometry.vertices[21].y = 5 + array[130]/25;
+  // mountains.geometry.vertices[22].y = 22 + array[120]/15;
+  // mountains.geometry.vertices[23].y = 6 + array[110]/35;
 
-  mountains.geometry.verticesNeedUpdate = true;
+  // mountains.geometry.verticesNeedUpdate = true;
 }
 
 function doBurst() {
@@ -417,7 +436,7 @@ function doBurst() {
     uniforms["color2"].needsUpdate = true
     gridUniforms["color1"].value.offsetHSL(0.05, 0, 0);
     gridUniforms["color1"].needsUpdate = true;
-    podLocationX = Math.floor(Math.random() * (window.screen.availWidth - 250))
+    podLocationX = Math.floor(Math.random() * (window.screen.availWidth - 450))
     podLocationY = Math.floor(Math.random())
 }
 
