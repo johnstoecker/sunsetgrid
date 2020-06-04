@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 import Building from './shapes/building';
-import Mountains from './shapes/mountains';
 
 // camera
 var scene = new THREE.Scene();
@@ -91,44 +90,6 @@ var innerMaterial = new THREE.MeshBasicMaterial( {
 var gridBase = new THREE.Mesh( gridBaseGeometry, innerMaterial );
 scene.add(gridBase);
 window.gridBase = gridBase;
-
-// add gradient for the sun
-var uniforms = {
-  "color1" : {
-    type : "c",
-    value : new THREE.Color(0xf4d676)
-  },
-  "color2" : {
-    type : "c",
-    value : new THREE.Color(0xff1690)
-  },
-};
-
-var material = new THREE.ShaderMaterial({
-  uniforms: uniforms,
-  vertexShader: `varying vec2 vUv;
-  void main() {
-  vUv = uv;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
-  }`,
-  fragmentShader: `uniform vec3 color1;
-  uniform vec3 color2;
-  varying vec2 vUv;
-  void main() {
-    gl_FragColor = vec4(mix(color1, color2, vUv.y),1.0);
-  }`
-});
-
-// add a setting sun
-var geometry = new THREE.CircleGeometry( 11, 32 );
-var circle = new THREE.Mesh( geometry, material );
-circle.position.set(0,9,-110)
-scene.add( circle );
-
-var mountains = Mountains.createMountains();
-// var sunOccluder = Mountains.createSunOccluder();
-scene.add(mountains.edges);
-scene.add(mountains.inner);
 
 // move -- stretchy stretches from y=0 to the beat. bouncy just moves up and down to the beat (stays the same size)
 // cubes, pyramids, frustums (pyramid with flat top)
@@ -333,7 +294,6 @@ function render() {
     // every 3 ticks, update the ~mountains~ buildings
     if (count % 3 == 0) {
       updateBuildings(array);
-      // updateMountains(array);
       // console.log("ave: "+ averageVolume + " moving: " + movingAverageVolume);
     }
     if (averageVolume > 20 && averageVolume > 1.08 * movingAverageVolume && time - lastBurstTime > 0.5) {
@@ -408,25 +368,6 @@ function updateBuildings(array) {
       stretchPyramidBuilding(buildings[i], val + buildings[i].data.dimensions[1]);
     }
   }
-}
-
-
-function updateMountains(array) {
-  // mountains.geometry.vertices[1].y = 20 + array[350]/15;
-  // mountains.geometry.vertices[4].y = 5 + array[330]/25;
-  // mountains.geometry.vertices[5].y = 12 + array[280]/15;
-  // mountains.geometry.vertices[6].y = 2 + array[280]/25;
-  // mountains.geometry.vertices[7].y = 16 + array[210]/15;
-  // mountains.geometry.vertices[13].y = 3 + array[170]/45;
-  // mountains.geometry.vertices[17].y = 13 + array[170]/15;
-  // mountains.geometry.vertices[18].y = 10 + array[170]/25;
-  // mountains.geometry.vertices[19].y = 18 + array[160]/15;
-  // mountains.geometry.vertices[20].y = 19 + array[140]/15;
-  // mountains.geometry.vertices[21].y = 5 + array[130]/25;
-  // mountains.geometry.vertices[22].y = 22 + array[120]/15;
-  // mountains.geometry.vertices[23].y = 6 + array[110]/35;
-
-  // mountains.geometry.verticesNeedUpdate = true;
 }
 
 function doBurst() {

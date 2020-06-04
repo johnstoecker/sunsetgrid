@@ -36,6 +36,37 @@ canvas {
   height: 75px;
 }
 
+.background-container {
+   position:absolute;
+   bottom: 61%;
+   left: 0px;
+   z-index: -1;
+}
+
+.foreground-container {
+   position:absolute;
+   bottom: 61%;
+   left: 0px;
+}
+
+
+
+.sun-container {
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+}
+
+.mountain-background {
+   width: 100%;
+   position: relative;
+}
+
+.mountain-foreground-left {
+  position: absolute;
+  bottom: -10px;
+}
+
 #pauseButton {
   display: none;
 }
@@ -43,5 +74,11 @@ canvas {
 @media only screen and (max-width: 760px) {
   .console input {
     height: 100px;
+  }
+}
+
+@media only screen and (min-width: 1000px) {
+  .background-container {
+    bottom: 55%;
   }
 }

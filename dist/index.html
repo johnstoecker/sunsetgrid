@@ -19,11 +19,15 @@
 	</head>
 	<body>
 		<script src="main.js"></script>
-    <!-- <label id="guideHelp" style="position:fixed;color:gray; margin:10px;margin-top:-80px;font: 300 14px Verdana, Arial, sans-serif;"> -->
-      <!-- Press 'h' for help. </label> -->
-		<!-- <label id="visualizerInfo" style="position:fixed;color:gray; margin:10px;margin-top:-60px;font: 300 14px Verdana, Arial, sans-serif;">
-			Press "space" to start streaming
-      </label> -->
+		<div class="background-container">
+			<div class="sun-container">
+				<img src="sun.png" style="position:relative; right: 40px; top: 50%; width: 80px;"/>
+			</div>
+			<img class="mountain-background" src="mountain_bg2.png"/>
+		</div>
+		<div class="foreground-container">
+			<!-- <img class="mountain-foreground-left" src="small_mountain2fake.png" -->
+		</div>
 		<div class="console">
 			<input type="image" id="playButton" src="play_button.png" alt="Play" />
 			<input type="image" id="pauseButton" src="pause_button.png" alt="Pause" />
