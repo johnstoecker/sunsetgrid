@@ -86,15 +86,22 @@ var lineMaterials = {};
 window.lineGeometries = {};
 window.geometries = {};
 
+window.pyramidGeomHits = 0;
+window.pyramidGeomMisses = 0;
+window.pyramidLineHits = 0;
+window.pyramidLineMisses = 0;
+
 function createPyramid(data) {
   var dimensions = data.dimensions;
   var position = data.position;
   var color = data.color;
-  var dataHash = JSON.stringify({ dimensions: data.dimensions, color: data.color, shape: data.shape });
+  var dataHash = JSON.stringify({ dimensions: data.dimensions, shape: data.shape });
   if (window.geometries[dataHash] != null) {
+    window.pyramidGeomHits +=1;
     var buildingGeometry = window.geometries[dataHash];
     var geometry = lineGeometries[dataHash];
   } else {
+    window.pyramidGeomMisses +=1;
     var buildingGeometry = new THREE.BufferGeometry();
     var vertices = [
         // ...vertices[52, 4, -88 ),
@@ -135,13 +142,18 @@ function createPyramid(data) {
     // ];
     buildingGeometry.addAttribute( 'position', new THREE.BufferAttribute( verticesFaces, 3 ) );
     var geometry = new THREE.EdgesGeometry( buildingGeometry );
-    window.geometries[dataHash] = buildingGeometry;
-    window.lineGeometries[dataHash] = geometry;
+    //only share geometries within uptown -- downtown gets its own geometries
+    if (data.move =="forward") {
+      window.geometries[dataHash] = buildingGeometry;
+      window.lineGeometries[dataHash] = geometry;
+    }
   }
 
   if (lineMaterials[color] != null) {
+    window.pyramidLineHits +=1;
     var material = lineMaterials[color]
   } else {
+    window.pyramidLineMisses +=1;
     var material = new THREE.LineBasicMaterial( { color: color } );
     lineMaterials[color] = material;
   }
@@ -155,18 +167,23 @@ function createPyramid(data) {
     data: data
   }
 }
-
+window.frustumGeomHits = 0;
+window.frustumGeomMisses =0;
+window.frustumLineHits = 0;
+window.frustumLineMisses =0;
 // a frustum is a pyramid with a flat top
 // dimensions: bottom length, bottom width, height, top length, top width
 function createFrustum(data) {
   var dimensions = data.dimensions;
   var position = data.position;
   var color = data.color;
-  var dataHash = JSON.stringify({ dimensions: data.dimensions, color: data.color, shape: data.shape });
+  var dataHash = JSON.stringify({ dimensions: data.dimensions, shape: data.shape });
   if (window.geometries[dataHash] != null) {
+    window.frustrumGeomHits +=1;
     var buildingGeometry = window.geometries[dataHash];
     var geometry = window.lineGeometries[dataHash];
   } else {
+    window.frustrumGeomMisses +=1;
     var buildingGeometry = new THREE.BufferGeometry();
     var vertices = [
         // new THREE.Vector3( 52, 4, -88 ),
@@ -210,13 +227,18 @@ function createFrustum(data) {
     ]);
     buildingGeometry.addAttribute( 'position', new THREE.BufferAttribute( verticesFaces, 3 ) );
     var geometry = new THREE.EdgesGeometry( buildingGeometry );
-    window.geometries[dataHash] = buildingGeometry;
-    window.lineGeometries[dataHash] = geometry;
+    //only share geometries within uptown -- downtown gets its own geometries
+    if (data.move =="forward") {
+      window.geometries[dataHash] = buildingGeometry;
+      window.lineGeometries[dataHash] = geometry;
+    }
   }
 
   if (lineMaterials[color] != null) {
+    window.frustumLineHits =+1;
     var material = lineMaterials[color]
   } else {
+    window.frustumLineMisses+=1;
     var material = new THREE.LineBasicMaterial( { color: color } );
     lineMaterials[color] = material;
   }
@@ -231,17 +253,23 @@ function createFrustum(data) {
   }
 }
 
+window.cubeGeomHits = 0
+window.cubeGeomMisses =0;
+window.cubeLineHits = 0;
+window.cubeLineMisses =0;
+
 function createCube(data) {
   var dimensions = data.dimensions;
   var position = data.position;
   var color = data.color;
-  var dataHash = JSON.stringify({ dimensions: data.dimensions, color: data.color, shape: data.shape });
+  var dataHash = JSON.stringify({ dimensions: data.dimensions, shape: data.shape });
   if (window.geometries[dataHash] != null) {
+    window.cubeGeomHits +=1;
     var buildingGeometry = window.geometries[dataHash];
     var geometry = window.lineGeometries[dataHash];
   } else {
-
-    var building1Geometry = new THREE.BufferGeometry();
+    window.cubeGeomMisses +=1;
+    var buildingGeometry = new THREE.BufferGeometry();
     var vertices = [
         [- dimensions[0]/2, - dimensions[1]/2, - dimensions[2]/2],
         [- dimensions[0]/2, - dimensions[1]/2, + dimensions[2]/2],
@@ -269,20 +297,25 @@ function createCube(data) {
 
     ]);
 
-    building1Geometry.addAttribute( 'position', new THREE.BufferAttribute( verticesFaces, 3 ) );
-    var geometry = new THREE.EdgesGeometry( building1Geometry );
-    window.geometries[dataHash] = buildingGeometry;
-    window.lineGeometries[dataHash] = geometry;
+    buildingGeometry.addAttribute( 'position', new THREE.BufferAttribute( verticesFaces, 3 ) );
+    var geometry = new THREE.EdgesGeometry( buildingGeometry );
+    //only share geometries within uptown -- downtown gets its own geometries
+    if (data.move =="forward") {
+      window.geometries[dataHash] = buildingGeometry;
+      window.lineGeometries[dataHash] = geometry;
+    }
   }
 
   if (lineMaterials[color] != null) {
+    window.cubeLineHits +=1;
     var material = lineMaterials[color]
   } else {
+    window.cubeLineMisses +=1;
     var material = new THREE.LineBasicMaterial( { color: color } );
     lineMaterials[color] = material;
   }
   var building = new THREE.LineSegments( geometry, material );
-  var buildingInner = new THREE.Mesh( building1Geometry, innerMaterial);
+  var buildingInner = new THREE.Mesh( buildingGeometry, innerMaterial);
   building.position.set(position[0], position[1], position[2])
   buildingInner.position.set(position[0], position[1], position[2])
   return {

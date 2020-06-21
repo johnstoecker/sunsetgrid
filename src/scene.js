@@ -345,30 +345,30 @@ function getBuildingRowData() {
 // 791E94
 // 541388
 
-//buildingData = buildingData.concat(getBuildingRowData());
-buildingData = buildingData.concat(getNewBuildingRowData());
-var buildings = [];
+var downtownBuildings = [];
 for(var i=0; i<buildingData.length; i++) {
   var building = Building.createBuilding(buildingData[i]);
   scene.add(building.edges);
   scene.add(building.inner);
-  buildings.push(building);
+  downtownBuildings.push(building);
 }
-window.buildings = buildings;
+
+var firstRowBuildingData = getNewBuildingRowData();
+var uptownBuildings = [];
+for(var i=0; i<firstRowBuildingData.length; i++) {
+  var building = Building.createBuilding(firstRowBuildingData[i]);
+  scene.add(building.edges);
+  scene.add(building.inner);
+  uptownBuildings.push(building);
+}
+
+
+
+// downtown buildings are on the horizon, bounce to the beat
+// uptown buildings move towards the camera
+window.downtownBuildings = downtownBuildings;
+window.uptownBuildings = uptownBuildings;
 window.dolphins = [];
-
-// var hemLight = new THREE.HemisphereLight( 0xff0000, 0x0000ff, 1 );
-// scene.add( hemLight );
-
-// var directionalLight = new THREE.DirectionalLight( 0xffffff, 1);
-// directionalLight.castShadow = true;
-// directionalLight.position.set(0,50,-150);
-// directionalLight.target = cube;
-//
-var light = new THREE.PointLight( 0xffffff, 2, 150 );
-light.position.set( 0, 10, -95 );
-scene.add( light );
-window.light = light;
 
 var light = new THREE.AmbientLight( 0x404040 ); // soft white light
 scene.add( light );
@@ -382,6 +382,8 @@ window.volumeAverages = volumeAverages;
 var lastBurst = -1;
 var lastBurstTime = -1;
 var lastBeatTime = -1;
+var currentRow = 0;
+var lastRowCount = 0;
 
 render();
 
@@ -405,8 +407,9 @@ function render() {
       updateBuildings(array);
       // console.log("ave: "+ averageVolume + " moving: " + movingAverageVolume);
     }
-    if (count % 40 == 0) {
-      var buildingData = getNewBuildingRowData();
+    if (count % 40 == 0 && currentRow < 30) {
+      currentRow += 1;
+      var buildingData = getNewBuildingRowData(currentRow);
 
       var newBuildings = [];
       for(var i=0; i<buildingData.length; i++) {
@@ -415,9 +418,18 @@ function render() {
         scene.add(building.inner);
         newBuildings.push(building);
       }
-      window.buildings = window.buildings.concat(newBuildings);
+      window.uptownBuildings = window.uptownBuildings.concat(newBuildings);
+      if (currentRow == 30) {
+        lastRowCount = count;
+      }
     }
-    if (count % 1500 == 0) {
+    if (count - lastRowCount > 800 && currentRow == 30) {
+      for (var i=0; i<window.uptownBuildings.length; i++) {
+        scene.remove(window.uptownBuildings[i].edges);
+        scene.remove(window.uptownBuildings[i].inner);
+        window.uptownBuildings = [];
+      }
+      currentRow = 0;
       // TODO: garbage collection
       // removeFirstRow();
     }
@@ -483,17 +495,19 @@ function slideBuilding(building) {
 }
 
 function updateBuildings(array) {
-  for(var i=0; i<window.buildings.length; i++) {
-    var val = array[window.buildings[i].data.frequency]/(window.buildings[i].data.divisor || 8);
-    if (window.buildings[i].data.move == "bouncy") {
-      moveBuilding(window.buildings[i], val);
-    } else if (window.buildings[i].data.move=="stretchy" && (window.buildings[i].data.shape == "cube" || window.buildings[i].data.shape == "frustum")) {
-      stretchRectangularBuilding(window.buildings[i], val + + window.buildings[i].data.position[1]);// + window.buildings[i].data.dimensions[1] );
-    } else if (window.buildings[i].data.move == "stretchy" && (window.buildings[i].data.shape == "pyramid")) {
-      stretchPyramidBuilding(window.buildings[i], val + window.buildings[i].data.position[1]);
-    } else if (window.buildings[i].data.move == "forward") {
-      slideBuilding(window.buildings[i])
+  for(var i=0; i<window.downtownBuildings.length; i++) {
+    var val = array[window.downtownBuildings[i].data.frequency]/(window.downtownBuildings[i].data.divisor || 8);
+    if (window.downtownBuildings[i].data.move == "bouncy") {
+      moveBuilding(window.downtownBuildings[i], val);
+    } else if (window.downtownBuildings[i].data.move=="stretchy" && (window.downtownBuildings[i].data.shape == "cube" || window.downtownBuildings[i].data.shape == "frustum")) {
+      stretchRectangularBuilding(window.downtownBuildings[i], val + + window.downtownBuildings[i].data.position[1]);// + window.downtownBuildings[i].data.dimensions[1] );
+    } else if (window.downtownBuildings[i].data.move == "stretchy" && (window.downtownBuildings[i].data.shape == "pyramid")) {
+      stretchPyramidBuilding(window.downtownBuildings[i], val + window.downtownBuildings[i].data.position[1]);
     }
+  }
+
+  for(var i=0; i<window.uptownBuildings.length; i++) {
+    slideBuilding(window.uptownBuildings[i]);
   }
 }
 
