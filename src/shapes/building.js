@@ -81,66 +81,74 @@ var innerMaterial = new THREE.MeshBasicMaterial( {
     polygonOffsetUnits: 1
 } );
 
-//
-// var building4Geometry = new THREE.BoxGeometry( 4, 4, 4 );
-// var geometry = new THREE.EdgesGeometry( building4Geometry );
-// var material = new THREE.LineBasicMaterial( { color: 0x0000ff } );
-// var building4 = new THREE.LineSegments( geometry, material );
-// building4.position.set(54, 2, -90);
-// scene.add(building4);
-// var building4Inner = new THREE.Mesh( building4Geometry, innerMaterial);
-// building4Inner.position.set(54, 2, -90);
-// scene.add(building4Inner);
-//
-
+// so we dont have to re-create materials/geometries over and over, save them here + re-use
+var lineMaterials = {};
+window.lineGeometries = {};
+window.geometries = {};
 
 function createPyramid(data) {
   var dimensions = data.dimensions;
   var position = data.position;
   var color = data.color;
-  var buildingGeometry = new THREE.BufferGeometry();
-  var vertices = [
-      // ...vertices[52, 4, -88 ),
-      // new THREE.Vector3( 52, 4, -92 ),
-      // new THREE.Vector3( 56, 4, -92 ),
-      // new THREE.Vector3( 56, 4, -88 ),
-      // new THREE.Vector3( 54, 12, -90 ),
+  var dataHash = JSON.stringify({ dimensions: data.dimensions, color: data.color, shape: data.shape });
+  if (window.geometries[dataHash] != null) {
+    var buildingGeometry = window.geometries[dataHash];
+    var geometry = lineGeometries[dataHash];
+  } else {
+    var buildingGeometry = new THREE.BufferGeometry();
+    var vertices = [
+        // ...vertices[52, 4, -88 ),
+        // new THREE.Vector3( 52, 4, -92 ),
+        // new THREE.Vector3( 56, 4, -92 ),
+        // new THREE.Vector3( 56, 4, -88 ),
+        // new THREE.Vector3( 54, 12, -90 ),
 
-      [position[0] - dimensions[0]/2, position[1] - dimensions[1]/2, position[2] - dimensions[2]/2 ],
-      [position[0] - dimensions[0]/2, position[1] - dimensions[1]/2, position[2] + dimensions[2]/2 ],
-      [position[0] + dimensions[0]/2, position[1] - dimensions[1]/2, position[2] + dimensions[2]/2 ],
-      [position[0] + dimensions[0]/2, position[1] - dimensions[1]/2, position[2] - dimensions[2]/2 ],
-      [position[0], position[1] + dimensions[1]/2, position[2]],
+        [- dimensions[0]/2, - dimensions[1]/2, - dimensions[2]/2 ],
+        [- dimensions[0]/2, - dimensions[1]/2, dimensions[2]/2 ],
+        [dimensions[0]/2, - dimensions[1]/2, - dimensions[2]/2 ],
+        [dimensions[0]/2, - dimensions[1]/2, dimensions[2]/2 ],
+        [0, dimensions[1]/2, 0],
 
-  ];
+    ];
 
-//   4
-//
-// 1   2
-//  0   3
-
-
-  var verticesFaces = new Float32Array([
-     ...vertices[1], ...vertices[4], ...vertices[0],
-     ...vertices[2], ...vertices[4], ...vertices[1],
-     ...vertices[3], ...vertices[4], ...vertices[2],
-     ...vertices[0], ...vertices[4], ...vertices[3]
-  ]);
+  //   4
+  //
+  // 0   2
+  //  1   3
 
 
-  // buildingGeometry.faces = [
-  //     // new THREE.Face3( 0, 1, 2 ),
-  //     // new THREE.Face3( 0, 2, 3 ),
-  //     new THREE.Face3( 1, 4, 0 ),
-  //     new THREE.Face3( 2, 4, 1 ),
-  //     new THREE.Face3( 3, 4, 2 ),
-  //     new THREE.Face3( 0, 4, 3 )
-  // ];
-  buildingGeometry.addAttribute( 'position', new THREE.BufferAttribute( verticesFaces, 3 ) );
-  var geometry = new THREE.EdgesGeometry( buildingGeometry );
-  var material = new THREE.LineBasicMaterial( { color: color } );
+    var verticesFaces = new Float32Array([
+       ...vertices[1], ...vertices[4], ...vertices[0],
+       ...vertices[3], ...vertices[4], ...vertices[1],
+       ...vertices[2], ...vertices[4], ...vertices[3],
+       ...vertices[0], ...vertices[4], ...vertices[2]
+    ]);
+
+
+    // buildingGeometry.faces = [
+    //     // new THREE.Face3( 0, 1, 2 ),
+    //     // new THREE.Face3( 0, 2, 3 ),
+    //     new THREE.Face3( 1, 4, 0 ),
+    //     new THREE.Face3( 2, 4, 1 ),
+    //     new THREE.Face3( 3, 4, 2 ),
+    //     new THREE.Face3( 0, 4, 3 )
+    // ];
+    buildingGeometry.addAttribute( 'position', new THREE.BufferAttribute( verticesFaces, 3 ) );
+    var geometry = new THREE.EdgesGeometry( buildingGeometry );
+    window.geometries[dataHash] = buildingGeometry;
+    window.lineGeometries[dataHash] = geometry;
+  }
+
+  if (lineMaterials[color] != null) {
+    var material = lineMaterials[color]
+  } else {
+    var material = new THREE.LineBasicMaterial( { color: color } );
+    lineMaterials[color] = material;
+  }
   var building = new THREE.LineSegments( geometry, material );
+  building.position.set(position[0], position[1], position[2])
   var buildingInner = new THREE.Mesh( buildingGeometry, innerMaterial);
+  buildingInner.position.set(position[0], position[1], position[2])
   return {
     edges: building,
     inner: buildingInner,
@@ -154,52 +162,68 @@ function createFrustum(data) {
   var dimensions = data.dimensions;
   var position = data.position;
   var color = data.color;
-  var buildingGeometry = new THREE.BufferGeometry();
-  var vertices = [
-      // new THREE.Vector3( 52, 4, -88 ),
-      // new THREE.Vector3( 52, 4, -92 ),
-      // new THREE.Vector3( 56, 4, -92 ),
-      // new THREE.Vector3( 56, 4, -88 ),
-      // new THREE.Vector3( 54, 12, -90 ),
+  var dataHash = JSON.stringify({ dimensions: data.dimensions, color: data.color, shape: data.shape });
+  if (window.geometries[dataHash] != null) {
+    var buildingGeometry = window.geometries[dataHash];
+    var geometry = window.lineGeometries[dataHash];
+  } else {
+    var buildingGeometry = new THREE.BufferGeometry();
+    var vertices = [
+        // new THREE.Vector3( 52, 4, -88 ),
+        // new THREE.Vector3( 52, 4, -92 ),
+        // new THREE.Vector3( 56, 4, -92 ),
+        // new THREE.Vector3( 56, 4, -88 ),
+        // new THREE.Vector3( 54, 12, -90 ),
 
-      [position[0] - dimensions[0]/2, position[1] - dimensions[1]/2, position[2] - dimensions[2]/2],
-      [position[0] - dimensions[0]/2, position[1] - dimensions[1]/2, position[2] + dimensions[2]/2],
-      [position[0] + dimensions[0]/2, position[1] - dimensions[1]/2, position[2] + dimensions[2]/2],
-      [position[0] + dimensions[0]/2, position[1] - dimensions[1]/2, position[2] - dimensions[2]/2],
+        [- dimensions[0]/2, - dimensions[1]/2, - dimensions[2]/2],
+        [- dimensions[0]/2, - dimensions[1]/2, + dimensions[2]/2],
+        [+ dimensions[0]/2, - dimensions[1]/2, + dimensions[2]/2],
+        [+ dimensions[0]/2, - dimensions[1]/2, - dimensions[2]/2],
 
-      [position[0] - dimensions[3]/2, position[1] + dimensions[1]/2, position[2] - dimensions[4]/2],
-      [position[0] - dimensions[3]/2, position[1] + dimensions[1]/2, position[2] + dimensions[4]/2],
-      [position[0] + dimensions[3]/2, position[1] + dimensions[1]/2, position[2] + dimensions[4]/2],
-      [position[0] + dimensions[3]/2, position[1] + dimensions[1]/2, position[2] - dimensions[4]/2],
+        [- dimensions[3]/2, + dimensions[1]/2, - dimensions[4]/2],
+        [- dimensions[3]/2, + dimensions[1]/2, + dimensions[4]/2],
+        [+ dimensions[3]/2, + dimensions[1]/2, + dimensions[4]/2],
+        [+ dimensions[3]/2, + dimensions[1]/2, - dimensions[4]/2],
 
-  ];
+    ];
 
-//5    6
-// 4    7
-//
-// 1   2
-//  0   3
+  //5    6
+  // 4    7
+  //
+  // 1   2
+  //  0   3
 
-  var verticesFaces = new Float32Array([
-      // new THREE.Face3( 0, 1, 2 ),
-      // new THREE.Face3( 0, 2, 3 ),
-      ...vertices[1], ...vertices[4], ...vertices[0],
-      ...vertices[1], ...vertices[5], ...vertices[4],
-      ...vertices[2], ...vertices[6], ...vertices[1],
-      ...vertices[1], ...vertices[6], ...vertices[5],
-      ...vertices[3], ...vertices[7], ...vertices[2],
-      ...vertices[2], ...vertices[7], ...vertices[6],
-      ...vertices[0], ...vertices[4], ...vertices[3],
-      ...vertices[3], ...vertices[4], ...vertices[7],
-      ...vertices[4], ...vertices[5], ...vertices[7],
-      ...vertices[7], ...vertices[5], ...vertices[6]
+    var verticesFaces = new Float32Array([
+        // new THREE.Face3( 0, 1, 2 ),
+        // new THREE.Face3( 0, 2, 3 ),
+        ...vertices[1], ...vertices[4], ...vertices[0],
+        ...vertices[1], ...vertices[5], ...vertices[4],
+        ...vertices[2], ...vertices[6], ...vertices[1],
+        ...vertices[1], ...vertices[6], ...vertices[5],
+        ...vertices[3], ...vertices[7], ...vertices[2],
+        ...vertices[2], ...vertices[7], ...vertices[6],
+        ...vertices[0], ...vertices[4], ...vertices[3],
+        ...vertices[3], ...vertices[4], ...vertices[7],
+        ...vertices[4], ...vertices[5], ...vertices[7],
+        ...vertices[7], ...vertices[5], ...vertices[6]
 
-  ]);
-  buildingGeometry.addAttribute( 'position', new THREE.BufferAttribute( verticesFaces, 3 ) );
-  var geometry = new THREE.EdgesGeometry( buildingGeometry );
-  var material = new THREE.LineBasicMaterial( { color: color } );
+    ]);
+    buildingGeometry.addAttribute( 'position', new THREE.BufferAttribute( verticesFaces, 3 ) );
+    var geometry = new THREE.EdgesGeometry( buildingGeometry );
+    window.geometries[dataHash] = buildingGeometry;
+    window.lineGeometries[dataHash] = geometry;
+  }
+
+  if (lineMaterials[color] != null) {
+    var material = lineMaterials[color]
+  } else {
+    var material = new THREE.LineBasicMaterial( { color: color } );
+    lineMaterials[color] = material;
+  }
   var building = new THREE.LineSegments( geometry, material );
   var buildingInner = new THREE.Mesh( buildingGeometry, innerMaterial);
+  building.position.set(position[0], position[1], position[2])
+  buildingInner.position.set(position[0], position[1], position[2])
   return {
     edges: building,
     inner: buildingInner,
@@ -211,40 +235,56 @@ function createCube(data) {
   var dimensions = data.dimensions;
   var position = data.position;
   var color = data.color;
+  var dataHash = JSON.stringify({ dimensions: data.dimensions, color: data.color, shape: data.shape });
+  if (window.geometries[dataHash] != null) {
+    var buildingGeometry = window.geometries[dataHash];
+    var geometry = window.lineGeometries[dataHash];
+  } else {
 
-  var building1Geometry = new THREE.BufferGeometry();
-  var vertices = [
-      [position[0] - dimensions[0]/2, position[1] - dimensions[1]/2, position[2] - dimensions[2]/2],
-      [position[0] - dimensions[0]/2, position[1] - dimensions[1]/2, position[2] + dimensions[2]/2],
-      [position[0] + dimensions[0]/2, position[1] - dimensions[1]/2, position[2] + dimensions[2]/2],
-      [position[0] + dimensions[0]/2, position[1] - dimensions[1]/2, position[2] - dimensions[2]/2],
+    var building1Geometry = new THREE.BufferGeometry();
+    var vertices = [
+        [- dimensions[0]/2, - dimensions[1]/2, - dimensions[2]/2],
+        [- dimensions[0]/2, - dimensions[1]/2, + dimensions[2]/2],
+        [+ dimensions[0]/2, - dimensions[1]/2, + dimensions[2]/2],
+        [+ dimensions[0]/2, - dimensions[1]/2, - dimensions[2]/2],
 
-      [position[0] - dimensions[0]/2, position[1] + dimensions[1]/2, position[2] - dimensions[2]/2],
-      [position[0] - dimensions[0]/2, position[1] + dimensions[1]/2, position[2] + dimensions[2]/2],
-      [position[0] + dimensions[0]/2, position[1] + dimensions[1]/2, position[2] + dimensions[2]/2],
-      [position[0] + dimensions[0]/2, position[1] + dimensions[1]/2, position[2] - dimensions[2]/2],
+        [- dimensions[0]/2, dimensions[1]/2, - dimensions[2]/2],
+        [- dimensions[0]/2, dimensions[1]/2, + dimensions[2]/2],
+        [+ dimensions[0]/2, dimensions[1]/2, + dimensions[2]/2],
+        [+ dimensions[0]/2, dimensions[1]/2, - dimensions[2]/2],
 
-  ];
+    ];
 
-  var verticesFaces = new Float32Array([
-      ...vertices[1], ...vertices[4], ...vertices[0],
-      ...vertices[1], ...vertices[5], ...vertices[4],
-      ...vertices[2], ...vertices[6], ...vertices[1],
-      ...vertices[1], ...vertices[6], ...vertices[5],
-      ...vertices[3], ...vertices[7], ...vertices[2],
-      ...vertices[2], ...vertices[7], ...vertices[6],
-      ...vertices[0], ...vertices[4], ...vertices[3],
-      ...vertices[3], ...vertices[4], ...vertices[7],
-      ...vertices[4], ...vertices[5], ...vertices[7],
-      ...vertices[7], ...vertices[5], ...vertices[6]
+    var verticesFaces = new Float32Array([
+        ...vertices[1], ...vertices[4], ...vertices[0],
+        ...vertices[1], ...vertices[5], ...vertices[4],
+        ...vertices[2], ...vertices[6], ...vertices[1],
+        ...vertices[1], ...vertices[6], ...vertices[5],
+        ...vertices[3], ...vertices[7], ...vertices[2],
+        ...vertices[2], ...vertices[7], ...vertices[6],
+        ...vertices[0], ...vertices[4], ...vertices[3],
+        ...vertices[3], ...vertices[4], ...vertices[7],
+        ...vertices[4], ...vertices[5], ...vertices[7],
+        ...vertices[7], ...vertices[5], ...vertices[6]
 
-  ]);
+    ]);
 
-  building1Geometry.addAttribute( 'position', new THREE.BufferAttribute( verticesFaces, 3 ) );
-  var geometry = new THREE.EdgesGeometry( building1Geometry );
-  var material = new THREE.LineBasicMaterial( { color: color } );
+    building1Geometry.addAttribute( 'position', new THREE.BufferAttribute( verticesFaces, 3 ) );
+    var geometry = new THREE.EdgesGeometry( building1Geometry );
+    window.geometries[dataHash] = buildingGeometry;
+    window.lineGeometries[dataHash] = geometry;
+  }
+
+  if (lineMaterials[color] != null) {
+    var material = lineMaterials[color]
+  } else {
+    var material = new THREE.LineBasicMaterial( { color: color } );
+    lineMaterials[color] = material;
+  }
   var building = new THREE.LineSegments( geometry, material );
   var buildingInner = new THREE.Mesh( building1Geometry, innerMaterial);
+  building.position.set(position[0], position[1], position[2])
+  buildingInner.position.set(position[0], position[1], position[2])
   return {
     edges: building,
     inner: buildingInner,

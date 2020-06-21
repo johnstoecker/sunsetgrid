@@ -158,92 +158,195 @@ var buildingData = [
     dimensions: [1,3,1],position: [-47,12.5,-90],color: 0xF6019D,frequency:15,shape:"cube",move:"bouncy",divisor:12
   },{
     dimensions: [1,3,1],position: [-51,12.5,-90],color: 0xF6019D,frequency:15,shape:"cube",move:"bouncy",divisor:12
-
-// second row
-  },{
-    dimensions: [4,2,4],position: [68,1,-80],color: 0xD40078,shape:"cube"
-  },{
-    dimensions: [6,4,6],position: [63,2,-80],color: 0xFF3864,shape:"cube"
-  },{
-    dimensions: [4,5,4],position: [58,2.5,-80],color: 0xF706CF,shape:"cube"
-  },{
-    dimensions: [4,4,4],position: [54,2,-80],color: 0x541388,shape:"pyramid"
-  },{
-    dimensions: [1,5,1],position: [51.5,2.5,-80],color: 0x791E94,shape:"cube"
-  },{
-    dimensions: [3,4,3],position: [49.5,2,-80],color: 0xD40078,shape:"cube"
-  },{
-    dimensions: [6,8,6],position: [45,4,-80],color: 0xF706CF,shape:"cube"
-  },{
-    dimensions: [6,3,6],position: [45,9.5,-80],color: 0xF706CF,shape:"pyramid"
-  },{
-    dimensions: [4,6,4],position: [40,3,-80],color: 0x023788,shape:"cube"
-  },{
-    dimensions: [2,4,4],position: [37,2,-80],color: 0xD40078,shape:"cube"
-  },{
-    dimensions: [4,5,4],position: [34,2.5,-80],color: 0x540D6E,shape:"cube"
-  },{
-    dimensions: [7,7,4],position: [28.5,3.5,-80],color: 0xF6019D,shape:"cube"
-  },{
-    dimensions: [1,2,1],position: [26.5,8,-80],color: 0xF6019D,shape:"cube"
-  },{
-    dimensions: [1,2,1],position: [30.5,8,-80],color: 0xF6019D,shape:"cube"
-  },{
-    dimensions: [4,6,4],position: [23,3,-80],color: 0xF6019D,shape:"cube"
-  },{
-    dimensions: [3,3,3,2,2],position: [19.5,1.5,-80],color: 0x540D6E,shape:"frustum"
-  },{
-    dimensions: [4,8,6],position: [15,4,-80],color: 0x2DE2E6,shape:"pyramid"
-  },{
-    dimensions: [4,2,4],position: [11,1,-80],color: 0xD40078,shape:"cube"
-  },{
-    dimensions: [4,6,4,2,2],position: [11,5,-80],color: 0xD40078,shape:"frustum"
-  },{
-    dimensions: [7,3,7],position: [5.5,1.5,-80],color: 0x541388,shape:"cube"
-  },{
-    dimensions: [4,1,4],position: [5.5,3.5,-80],color: 0x541388,shape:"cube"
-  },{
-    dimensions: [3,4,3],position: [-3.5,2,-80],color: 0x791E94,shape:"cube"
-  },{
-    dimensions: [3,3,3],position: [-3.5,5.5,-80],color: 0x791E94,shape:"pyramid"
-
-  },{
-    dimensions: [4,5,4],position: [-7,2.5,-80],color: 0xF706CF,shape:"cube"
-  },{
-    dimensions: [1,5,1],position: [-9.5,2.5,-80],color: 0x791E94,shape:"cube"
-  },{
-    dimensions: [4,2,4],position: [-12,1,-80],color: 0xD40078,shape:"cube"
-  },{
-    dimensions: [4,4,4],position: [-16,2,-80],color: 0x541388,shape:"pyramid"
-  },{
-    dimensions: [6,4,6],position: [-21,2,-80],color: 0xFF3864,shape:"cube"
-
-
-  },{
-    dimensions: [7,7,4],position: [-27.5,3.5,-80],color: 0xF6019D,shape:"cube"
-  },{
-    dimensions: [1,2,1],position: [-25.5,8,-80],color: 0xF6019D,shape:"cube"
-  },{
-    dimensions: [1,2,1],position: [-29.5,8,-80],color: 0xF6019D,shape:"cube"
-  },{
-    dimensions: [2,4,4],position: [-32,2,-80],color: 0xD40078,shape:"cube"
-  },{
-    dimensions: [4,6,4],position: [-35,3,-80],color: 0xF6019D,shape:"cube"
-  },{
-    dimensions: [3,3,3,2,2],position: [-38.5,1.5,-80],color: 0x540D6E,shape:"frustum"
-  },{
-    dimensions: [4,5,4],position: [-42,2.5,-80],color: 0x540D6E,shape:"cube"
-  },{
-    dimensions: [4,8,6],position: [-46,4,-80],color: 0x2DE2E6,shape:"pyramid"
-  },{
-    dimensions: [4,6,4,2,2],position: [-48,3,-80],color: 0xD40078,shape:"frustum"
   }
 ]
 
+
+var colors = [0xD40078, 0xFF3864, 0xF706CF, 0x541388, 0x791E94, 0x023788, 0xF6019D, 0x2DE2E6]
+
+function getRandomBuildingData(positionX, sizeX) {
+  var buildingChoicePicker = Math.random() * 10;
+  let color = colors[Math.floor(Math.random() * colors.length)]
+  // cube
+  if (buildingChoicePicker > 7) {
+    var dimensionY = Math.floor(Math.random()*7) + 2;
+    return [{
+      dimensions: [sizeX, dimensionY, sizeX], position: [positionX, dimensionY/2, -80], color: color, shape: "cube", move: "forward"
+    }]
+    // pyramid
+  } else if(buildingChoicePicker > 6){
+    var dimensionY = Math.floor(Math.random() *7)+2;
+    return [{
+      dimensions: [sizeX, dimensionY, sizeX], position: [positionX, dimensionY/2, -80], color: color, shape: "pyramid", move: "forward"
+    }]
+    //frustum
+  } else if(buildingChoicePicker > 5) {
+    var dimensionY = Math.floor(Math.random() * 7)+2;
+    return [{
+      dimensions: [sizeX, dimensionY, sizeX, 2, 2], position: [positionX, dimensionY/2, -80], color: color, shape: "frustum", move: "forward"
+    }]
+    // 1 cube on top of another
+  } else if(buildingChoicePicker > 4) {
+    var dimensionY = Math.floor(Math.random() * 5)+2;
+    var topDimensionY = Math.floor(Math.random()*3)+1;
+    var topDimensionX = sizeX -2;
+    return [{
+      dimensions: [sizeX, dimensionY, sizeX], position: [positionX, dimensionY/2, -80], color: color, shape: "cube", move: "forward"
+    }, {
+      dimensions: [topDimensionX, topDimensionY, topDimensionX], position: [positionX, dimensionY+topDimensionY/2, -80], color: color, shape: "cube", move: "forward"
+    }]
+    // cube with two cube towers
+  } else if(buildingChoicePicker > 3) {
+    var dimensionY = Math.floor(Math.random() * 7)+2;
+    var topDimensionY = Math.floor(Math.random()*2)+1;
+    return [{
+      dimensions: [sizeX, dimensionY, sizeX], position: [positionX, dimensionY/2, -80], color: color, shape: "cube", move: "forward"
+    }, {
+      dimensions: [1, topDimensionY, 1], position: [positionX - sizeX/4, dimensionY + topDimensionY/2, -80], color: color, shape: "cube", move: "forward"
+    }, {
+      dimensions: [1, topDimensionY, 1], position: [positionX + sizeX/4, dimensionY + topDimensionY/2, -80], color: color, shape: "cube", move: "forward"
+    }]
+    //cube with pyramid tower
+  } else if(buildingChoicePicker > 2) {
+    var dimensionY = Math.floor(Math.random() * 5)+2;
+    var topDimensionY = Math.floor(Math.random()*3)+2;
+    return [{
+      dimensions: [sizeX, dimensionY, sizeX], position: [positionX, dimensionY/2, -80], color: color, shape: "cube", move: "forward"
+    }, {
+      dimensions: [sizeX, topDimensionY, sizeX], position: [positionX, dimensionY + topDimensionY/2, -80], color: color, shape: "pyramid", move: "forward"
+    }]
+    // frustrum with cube on top
+  } else if (buildingChoicePicker > 1) {
+    var dimensionY = Math.floor(Math.random() * 7)+2;
+    var topDimensionY = Math.floor(Math.random()*3)+2;
+    return [{
+      dimensions: [sizeX, dimensionY, sizeX, 2, 2], position: [positionX, dimensionY/2, -80], color: color, shape: "frustum", move: "forward"
+    }, {
+      dimensions: [sizeX-2, topDimensionY, sizeX-2], position: [positionX, dimensionY + topDimensionY/2, -80], color: color, shape: "cube", move: "forward"
+    }]
+  // 3 cubes on top of each other
+  } else {
+    var dimensionY = Math.floor(Math.random() * 2)+2;
+    return [{
+      dimensions: [sizeX, dimensionY, sizeX], position: [positionX, dimensionY/2, -80], color: color, shape: "cube", move: "forward"
+    }, {
+      dimensions: [sizeX, dimensionY, sizeX], position: [positionX, dimensionY * 1.5, -80], color: color, shape: "cube", move: "forward"
+    }, {
+      dimensions: [sizeX, dimensionY, sizeX], position: [positionX, dimensionY * 2.5, -80], color: color, shape: "cube", move: "forward"
+    }]
+  }
+}
+
+function getNewBuildingRowData() {
+  var sizeX = Math.floor(Math.random() * 4 + 3);
+  var currentX = sizeX / 2 + 2;
+
+  var newRowData = []
+
+  while (currentX < 70) {
+    newRowData = newRowData.concat(getRandomBuildingData(currentX, sizeX));
+    currentX = currentX + sizeX / 2;
+    sizeX = Math.floor(Math.random() * 4 + 3);
+    currentX = currentX + sizeX / 2;
+  }
+
+  currentX = - sizeX / 2 - 2;
+  while (currentX > -70) {
+    newRowData = newRowData.concat(getRandomBuildingData(currentX, sizeX));
+    currentX = currentX - sizeX / 2;
+    sizeX = Math.floor(Math.random() * 4 + 3);
+    currentX = currentX - sizeX / 2;
+  }
+
+  return newRowData;
+}
+
+
+
+function getBuildingRowData() {
+// second row
+  return [{
+    dimensions: [4,2,4],position: [68,1,-80],color: 0xD40078,shape:"cube", move: "forward"
+  },{
+    dimensions: [6,4,6],position: [63,2,-80],color: 0xFF3864,shape:"cube", move: "forward"
+  },{
+    dimensions: [4,5,4],position: [58,2.5,-80],color: 0xF706CF,shape:"cube", move: "forward"
+  },{
+    dimensions: [4,4,4],position: [54,2,-80],color: 0x541388,shape:"pyramid", move: "forward"
+  },{
+    dimensions: [1,5,1],position: [51.5,2.5,-80],color: 0x791E94,shape:"cube", move: "forward"
+  },{
+    dimensions: [3,4,3],position: [49.5,2,-80],color: 0xD40078,shape:"cube", move: "forward"
+  },{
+    dimensions: [6,8,6],position: [45,4,-80],color: 0xF706CF,shape:"cube", move: "forward"
+  },{
+    dimensions: [6,3,6],position: [45,9.5,-80],color: 0xF706CF,shape:"pyramid", move: "forward"
+  },{
+    dimensions: [4,6,4],position: [40,3,-80],color: 0x023788,shape:"cube", move: "forward"
+  },{
+    dimensions: [2,4,4],position: [37,2,-80],color: 0xD40078,shape:"cube", move: "forward"
+  },{
+    dimensions: [4,5,4],position: [34,2.5,-80],color: 0x540D6E,shape:"cube", move: "forward"
+  },{
+    dimensions: [7,7,4],position: [28.5,3.5,-80],color: 0xF6019D,shape:"cube", move: "forward"
+  },{
+    dimensions: [1,2,1],position: [26.5,8,-80],color: 0xF6019D,shape:"cube", move: "forward"
+  },{
+    dimensions: [1,2,1],position: [30.5,8,-80],color: 0xF6019D,shape:"cube", move: "forward"
+  },{
+    dimensions: [4,6,4],position: [23,3,-80],color: 0xF6019D,shape:"cube", move: "forward"
+  },{
+    dimensions: [3,3,3,2,2],position: [19.5,1.5,-80],color: 0x540D6E,shape:"frustum", move: "forward"
+  },{
+    dimensions: [4,8,6],position: [15,4,-80],color: 0x2DE2E6,shape:"pyramid", move: "forward"
+  },{
+    dimensions: [4,2,4],position: [11,1,-80],color: 0xD40078,shape:"cube", move: "forward"
+  },{
+    dimensions: [4,6,4,2,2],position: [11,5,-80],color: 0xD40078,shape:"frustum", move: "forward"
+  },{
+    dimensions: [7,3,7],position: [5.5,1.5,-80],color: 0x541388,shape:"cube", move: "forward"
+  },{
+    dimensions: [4,1,4],position: [5.5,3.5,-80],color: 0x541388,shape:"cube", move: "forward"
+  },{
+    dimensions: [3,4,3],position: [-3.5,2,-80],color: 0x791E94,shape:"cube", move: "forward"
+  },{
+    dimensions: [3,3,3],position: [-3.5,5.5,-80],color: 0x791E94,shape:"pyramid", move: "forward"
+  },{
+    dimensions: [4,5,4],position: [-7,2.5,-80],color: 0xF706CF,shape:"cube", move: "forward"
+  },{
+    dimensions: [1,5,1],position: [-9.5,2.5,-80],color: 0x791E94,shape:"cube", move: "forward"
+  },{
+    dimensions: [4,2,4],position: [-12,1,-80],color: 0xD40078,shape:"cube", move: "forward"
+  },{
+    dimensions: [4,4,4],position: [-16,2,-80],color: 0x541388,shape:"pyramid", move: "forward"
+  },{
+    dimensions: [6,4,6],position: [-21,2,-80],color: 0xFF3864,shape:"cube", move: "forward"
+  },{
+    dimensions: [7,7,4],position: [-27.5,3.5,-80],color: 0xF6019D,shape:"cube", move: "forward"
+  },{
+    dimensions: [1,2,1],position: [-25.5,8,-80],color: 0xF6019D,shape:"cube", move: "forward"
+  },{
+    dimensions: [1,2,1],position: [-29.5,8,-80],color: 0xF6019D,shape:"cube", move: "forward"
+  },{
+    dimensions: [2,4,4],position: [-32,2,-80],color: 0xD40078,shape:"cube", move: "forward"
+  },{
+    dimensions: [4,6,4],position: [-35,3,-80],color: 0xF6019D,shape:"cube", move: "forward"
+  },{
+    dimensions: [3,3,3,2,2],position: [-38.5,1.5,-80],color: 0x540D6E,shape:"frustum", move: "forward"
+  },{
+    dimensions: [4,5,4],position: [-42,2.5,-80],color: 0x540D6E,shape:"cube", move: "forward"
+  },{
+    dimensions: [4,8,6],position: [-46,4,-80],color: 0x2DE2E6,shape:"pyramid", move: "forward"
+  },{
+    dimensions: [4,6,4,2,2],position: [-48,3,-80],color: 0xD40078,shape:"frustum", move: "forward"
+  }];
+}
 // 540D6E
 // 791E94
 // 541388
 
+//buildingData = buildingData.concat(getBuildingRowData());
+buildingData = buildingData.concat(getNewBuildingRowData());
 var buildings = [];
 for(var i=0; i<buildingData.length; i++) {
   var building = Building.createBuilding(buildingData[i]);
@@ -302,8 +405,23 @@ function render() {
       updateBuildings(array);
       // console.log("ave: "+ averageVolume + " moving: " + movingAverageVolume);
     }
+    if (count % 40 == 0) {
+      var buildingData = getNewBuildingRowData();
+
+      var newBuildings = [];
+      for(var i=0; i<buildingData.length; i++) {
+        var building = Building.createBuilding(buildingData[i]);
+        scene.add(building.edges);
+        scene.add(building.inner);
+        newBuildings.push(building);
+      }
+      window.buildings = window.buildings.concat(newBuildings);
+    }
+    if (count % 1500 == 0) {
+      // TODO: garbage collection
+      // removeFirstRow();
+    }
     if (averageVolume > 20 && averageVolume > 1.08 * movingAverageVolume && time - lastBurstTime > 0.5) {
-      console.log('burst');
       spawnDolphin();
       // lastBurst = count;
       lastBurstTime = time;
@@ -355,19 +473,26 @@ function stretchPyramidBuilding(building, val) {
 
 function moveBuilding(building, val) {
   // translateZ instead
-  building.edges.position.set(0,val,0);
-  building.inner.position.set(0,val,0);
+  building.edges.position.set(building.data.position[0],building.data.position[1] + val,building.data.position[2]);
+  building.inner.position.set(building.data.position[0],building.data.position[1] + val,building.data.position[2]);
+}
+
+function slideBuilding(building) {
+  building.edges.translateZ(1);
+  building.inner.translateZ(1);
 }
 
 function updateBuildings(array) {
-  for(var i=0; i<buildings.length; i++) {
-    var val = array[buildings[i].data.frequency]/(buildings[i].data.divisor || 8);
-    if (buildings[i].data.move == "bouncy") {
-      moveBuilding(buildings[i], val);
-    } else if (buildings[i].data.move=="stretchy" && (buildings[i].data.shape == "cube" || buildings[i].data.shape == "frustum")) {
-      stretchRectangularBuilding(buildings[i], val + buildings[i].data.dimensions[1]);
-    } else if (buildings[i].data.move == "stretchy" && (buildings[i].data.shape == "pyramid")) {
-      stretchPyramidBuilding(buildings[i], val + buildings[i].data.dimensions[1]);
+  for(var i=0; i<window.buildings.length; i++) {
+    var val = array[window.buildings[i].data.frequency]/(window.buildings[i].data.divisor || 8);
+    if (window.buildings[i].data.move == "bouncy") {
+      moveBuilding(window.buildings[i], val);
+    } else if (window.buildings[i].data.move=="stretchy" && (window.buildings[i].data.shape == "cube" || window.buildings[i].data.shape == "frustum")) {
+      stretchRectangularBuilding(window.buildings[i], val + + window.buildings[i].data.position[1]);// + window.buildings[i].data.dimensions[1] );
+    } else if (window.buildings[i].data.move == "stretchy" && (window.buildings[i].data.shape == "pyramid")) {
+      stretchPyramidBuilding(window.buildings[i], val + window.buildings[i].data.position[1]);
+    } else if (window.buildings[i].data.move == "forward") {
+      slideBuilding(window.buildings[i])
     }
   }
 }
@@ -376,6 +501,8 @@ function updateDolphins() {
   for (var i=0; i<window.dolphins.length; i++) {
     window.dolphins[i].rotation = window.dolphins[i].rotation - 0.05;
     window.dolphins[i].mesh.rotation.z = window.dolphins[i].rotation
+    window.dolphins[i].mesh.translateZ(1);
+    window.dolphins[i].mesh.translateX(0.02);
     if (window.dolphins[i].rotation < -Math.PI) {
       scene.remove(window.dolphins[i].mesh)
       window.dolphins.splice(i,1)
@@ -395,39 +522,22 @@ function doBurst() {
 var podLocationX = -20;
 var podLocationZ = -30;
 
-function spawnDolphin2() {
-  var randomX = podLocationX + Math.floor(Math.random() * 150)
-  var randomY = podLocationY + Math.floor(Math.random() * 10)
-  var randomYTop =  randomY + 35;
-  var myImage = new Image();
-  // the browser caches the image -- so if I spawn another dolphin, browser
-  // just loads that same dolphin. to get a true copy, mangle the source
-  // so the browser thinks its different. cool!
-  myImage.src = 'dolphin_animation_small.gif?' + Math.random();
-  myImage.style.position = "absolute";
-  myImage.style.top = randomYTop + "%";
-  myImage.style.left = randomX + "px";
-  document.body.appendChild(myImage);
-  setTimeout(function() { document.body.removeChild(myImage);}, 5000);
-}
+
+var textureLoader = new THREE.TextureLoader();
+textureLoader.setCrossOrigin("");
+var texture = textureLoader.load( './dolphin_texture.png' );
+var dolphinGeometry = new THREE.PlaneGeometry( 10, 10 );
+dolphinGeometry.translate( -5, 5, 0);
+var dolphinMaterial = new THREE.MeshBasicMaterial( { map: texture, transparent: true } );
+
 
 function spawnDolphin() {
   var randomX = podLocationX + Math.floor(Math.random() * 20) - 10
   var randomZ = podLocationZ + Math.floor(Math.random() * -20) + 10
 
-
-  var textureLoader = new THREE.TextureLoader();
-  textureLoader.setCrossOrigin("");
-  var texture = textureLoader.load( './dolphin_texture.png' );
-
-  // var geometry = new THREE.BoxBufferGeometry( 10, 10, 10 );
-  var geometry = new THREE.PlaneGeometry( 10, 10 );
-  geometry.translate( -5, 5, 0);
-  var material = new THREE.MeshBasicMaterial( { map: texture, transparent: true } );
-
-  var mesh = new THREE.Mesh( geometry, material );
-  mesh.position.set(randomX,0, randomZ)
-  mesh.rotation.z = Math.PI * 0.5
+  var mesh = new THREE.Mesh( dolphinGeometry, dolphinMaterial );
+  mesh.position.set(randomX, -2 , randomZ)
+  mesh.rotation.z = Math.PI * 0.7
 
   scene.add( mesh );
 
