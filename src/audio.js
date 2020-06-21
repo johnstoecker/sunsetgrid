@@ -1,5 +1,3 @@
-var RealTimeBPMAnalyzer = require('realtime-bpm-analyzer');
-
 var sunsetAudio = {
   paused: false,
   audio: undefined,
@@ -127,29 +125,6 @@ function startStream() {
   sunsetAudio.scriptProcessorNode.connect(sunsetAudio.audioContext.destination);
   sunsetAudio.mediaElementSource.connect(sunsetAudio.scriptProcessorNode);
   sunsetAudio.mediaElementSource.connect(sunsetAudio.audioContext.destination);
-
-  var onAudioProcess = new RealTimeBPMAnalyzer({
-      scriptNode: {
-          bufferSize: 4096,
-          numberOfInputChannels: 1,
-          numberOfOutputChannels: 1
-      },
-      pushTime: 10000,
-      pushCallback: function (err, bpm) {
-          console.log('bpm', bpm);
-          // counts over 100 are unreliable
-          if (bpm && bpm[0].count < 100) {
-            var currentBPM = bpm[0].tempo;
-            window.currentBeatDelta = 60.0/currentBPM;
-          }
-      }
-  });
-  // Attach realTime function to audioprocess event.inputBuffer (AudioBuffer)
-  sunsetAudio.scriptProcessorNode.onaudioprocess = function (e) {
-      onAudioProcess.analyze(e);
-  };
-
-
 
   window.sunsetAnalyzer = sunsetAudio.analyzer
   console.log(sunsetAudio.audioContext.sampleRate);

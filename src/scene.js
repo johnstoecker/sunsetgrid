@@ -79,8 +79,8 @@ scene.add(grid);
 var gridBaseGeometry = new THREE.BufferGeometry();
 
 var vertices = new Float32Array( [
-  -110,-1,50,  110,-1,-112,   -110,-1,-112,
-  -110,-1,50,  110,-1,40,     110, -1, -112
+  -110,-0.1,50,  110,-0.1,-112,   -110,-0.1,-112,
+  -110,-0.1,50,  110,-0.1,40,     110, -0.1, -112
 ]);
 gridBaseGeometry.addAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
 var innerMaterial = new THREE.MeshBasicMaterial( {
@@ -252,6 +252,7 @@ for(var i=0; i<buildingData.length; i++) {
   buildings.push(building);
 }
 window.buildings = buildings;
+window.dolphins = [];
 
 // var hemLight = new THREE.HemisphereLight( 0xff0000, 0x0000ff, 1 );
 // scene.add( hemLight );
@@ -284,6 +285,11 @@ render();
 function render() {
   requestAnimationFrame(render);
   count = count + 1;
+
+  if (count % 3 == 1) {
+    updateDolphins();
+  }
+
   if (window.sunsetAnalyzer) {
     var array =  new Uint8Array(window.sunsetAnalyzer.frequencyBinCount);
     window.sunsetAnalyzer.getByteFrequencyData(array);
@@ -303,10 +309,6 @@ function render() {
       lastBurstTime = time;
       lastBeatTime = time;
       doBurst();
-    } else if (averageVolume > 20 && time - lastBeatTime > window.currentBeatDelta) {
-      console.log('beat');
-      doBurst();
-      lastBeatTime = time;
     }
     volumeAverages.shift()
   }
@@ -370,22 +372,30 @@ function updateBuildings(array) {
   }
 }
 
+function updateDolphins() {
+  for (var i=0; i<window.dolphins.length; i++) {
+    window.dolphins[i].rotation = window.dolphins[i].rotation - 0.05;
+    window.dolphins[i].mesh.rotation.z = window.dolphins[i].rotation
+    if (window.dolphins[i].rotation < -Math.PI) {
+      scene.remove(window.dolphins[i].mesh)
+      window.dolphins.splice(i,1)
+      i -= 1;
+    }
+  }
+}
+
 function doBurst() {
-    uniforms["color1"].value.offsetHSL( 0.05, 0, 0 );
-    uniforms["color1"].needsUpdate = true
-    uniforms["color2"].value.offsetHSL( -0.05, 0, 0 );
-    uniforms["color2"].needsUpdate = true
     gridUniforms["color1"].value.offsetHSL(0.05, 0, 0);
     gridUniforms["color1"].needsUpdate = true;
-    podLocationX = Math.floor(Math.random() * (window.screen.availWidth - 450))
-    podLocationY = Math.floor(Math.random())
+    podLocationX = Math.floor(Math.random() * 150) - 75;
+    podLocationZ = Math.floor(Math.random() * -50) + 10;
 }
 
 // have dolphins generally spawn near each other
-var podLocationX = 50;
-var podLocationY = 10;
+var podLocationX = -20;
+var podLocationZ = -30;
 
-function spawnDolphin() {
+function spawnDolphin2() {
   var randomX = podLocationX + Math.floor(Math.random() * 150)
   var randomY = podLocationY + Math.floor(Math.random() * 10)
   var randomYTop =  randomY + 35;
@@ -399,6 +409,34 @@ function spawnDolphin() {
   myImage.style.left = randomX + "px";
   document.body.appendChild(myImage);
   setTimeout(function() { document.body.removeChild(myImage);}, 5000);
+}
+
+function spawnDolphin() {
+  var randomX = podLocationX + Math.floor(Math.random() * 20) - 10
+  var randomZ = podLocationZ + Math.floor(Math.random() * -20) + 10
+
+
+  var textureLoader = new THREE.TextureLoader();
+  textureLoader.setCrossOrigin("");
+  var texture = textureLoader.load( './dolphin_texture.png' );
+
+  // var geometry = new THREE.BoxBufferGeometry( 10, 10, 10 );
+  var geometry = new THREE.PlaneGeometry( 10, 10 );
+  geometry.translate( -5, 5, 0);
+  var material = new THREE.MeshBasicMaterial( { map: texture, transparent: true } );
+
+  var mesh = new THREE.Mesh( geometry, material );
+  mesh.position.set(randomX,0, randomZ)
+  mesh.rotation.z = Math.PI * 0.5
+
+  scene.add( mesh );
+
+  window.dolphins.push(
+    {
+      rotation: Math.PI * 0.5,
+      mesh: mesh
+    }
+  )
 }
 
 function getAverageVolume(array, maxSize) {
