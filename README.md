@@ -3,12 +3,20 @@ Outrun synthwave music visualizer
 
 ![alt text](http://sunsetgrid.com/sunset_grid.png)
 
-# to run:
+
+# install
+npm install
+
+# webpack dev server:
+npm start
+ ->> should open localhost:8080 in web browser
+
+# production build:
 npm run build
-open index.html in browser
+open dist/index.html in browser (you might have to fiddle with CORS)
+
 
 Controls
 --------
 spacebar: play/pause
 d: spawn a dolphin
-

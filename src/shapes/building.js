@@ -143,7 +143,7 @@ function createPyramid(data) {
     buildingGeometry.addAttribute( 'position', new THREE.BufferAttribute( verticesFaces, 3 ) );
     var geometry = new THREE.EdgesGeometry( buildingGeometry );
     //only share geometries within uptown -- downtown gets its own geometries
-    if (data.move =="forward") {
+    if (data.move =="forward" || data.move == null) {
       window.geometries[dataHash] = buildingGeometry;
       window.lineGeometries[dataHash] = geometry;
     }
@@ -228,7 +228,7 @@ function createFrustum(data) {
     buildingGeometry.addAttribute( 'position', new THREE.BufferAttribute( verticesFaces, 3 ) );
     var geometry = new THREE.EdgesGeometry( buildingGeometry );
     //only share geometries within uptown -- downtown gets its own geometries
-    if (data.move =="forward") {
+    if (data.move =="forward" || data.move == null) {
       window.geometries[dataHash] = buildingGeometry;
       window.lineGeometries[dataHash] = geometry;
     }
@@ -300,7 +300,7 @@ function createCube(data) {
     buildingGeometry.addAttribute( 'position', new THREE.BufferAttribute( verticesFaces, 3 ) );
     var geometry = new THREE.EdgesGeometry( buildingGeometry );
     //only share geometries within uptown -- downtown gets its own geometries
-    if (data.move =="forward") {
+    if (data.move =="forward" || data.move == null) {
       window.geometries[dataHash] = buildingGeometry;
       window.lineGeometries[dataHash] = geometry;
     }

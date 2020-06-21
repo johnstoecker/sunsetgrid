@@ -36,6 +36,28 @@ canvas {
   height: 75px;
 }
 
+.info-box {
+  position: absolute;
+  bottom:40px;
+  right: 10px;
+}
+
+.info-box input {
+  cursor: pointer;
+  height: 50px;
+}
+
+.about-container {
+  visibility: hidden;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  color: white;
+  background-color: lightslategrey;
+  padding: 20px;
+  line-height: 1.5em;
+}
+
 .background-container {
    position:absolute;
    bottom: 61%;

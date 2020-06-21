@@ -9,6 +9,28 @@ window.addEventListener('load', function() {
   document.getElementById("pauseButton").addEventListener("click", sunsetAudio.playPause);
   document.getElementById("nextButton").addEventListener("click", sunsetAudio.nextStream);
   document.getElementById("dolphinButton").addEventListener("click", scene.spawnDolphin);
+  document.getElementById("questionMark").addEventListener("click", showAbout, false);
+  // document.getElementById("questionMark").addEventListener("blur", hideAbout, false);
+  window.addEventListener('click', windowClickListener, false);
+
+  function windowClickListener (event) {
+    if (!document.getElementById("aboutContainer").contains(event.target) &&
+    !document.getElementById("questionMark").contains(event.target)) {
+      document.getElementById("aboutContainer").style.visibility = "hidden";
+    }
+    scene.spawnDolphin();
+  }
+
+  function showAbout () {
+    document.getElementById("aboutContainer").style.visibility = "visible"
+  }
+
+  function hideAbout (event) {
+    console.log(event);
+    if (!document.getElementById("aboutContainer").contains(event.target) && document.getElementById("aboutContainer") != event.target) {
+      document.getElementById("aboutContainer").style.visibility = "hidden"
+    }
+  }
 
   function keypress(e) {
     // spacebar
