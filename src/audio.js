@@ -9,7 +9,7 @@ var sunsetAudio = {
 
 
 // // audio.src = 'http://192.99.37.181:8050/live.mp3';
-// poolside.fm
+// poolside.fm DEFUNCT! :()
 // audio.src = 'http://stream.radio.co/s98f81d47e/listen';
 // outrun
 // http://139.162.14.151:9090/160mp3/;?d=
@@ -26,10 +26,10 @@ var sunsetAudio = {
 // http://air.radiorecord.ru:805/synth_128
 
 var streams = [
-  { name: "poolside.fm", src: "http://stream.radio.co/s98f81d47e/listen", songURL: "https://public.radio.co/stations/s98f81d47e/status"},
-  { name: "Radio Record Synthwave", src: "http://air.radiorecord.ru:805/synth_128", details: "Radio Record Synthwave -- https://www.radiorecord.ru/"},
-  { name: "Radionomy Retrowave", src: "http://139.162.14.151:9090/160mp3/;?d", details: "Synthwave Retrowave Radionomy", songURL: "http://139.162.14.151:9090/7.html"},
+  // { name: "poolside.fm", src: "http://stream.radio.co/s98f81d47e/listen", songURL: "https://public.radio.co/stations/s98f81d47e/status"},
   { name: "Radio Caprice Retrowave", src: "http://79.120.39.202:8000/retrowave", details: "Radio Caprice http://radcap.ru"},
+  { name: "Radio Record Synthwave", src: "http://air.radiorecord.ru:805/synth_128", details: "Radio Record Synthwave -- https://www.radiorecord.ru/"},
+  // { name: "Radionomy Retrowave", src: "http://139.162.14.151:9090/160mp3/;?d", details: "Synthwave Retrowave Radionomy", songURL: "http://139.162.14.151:9090/7.html"},
   { name: "Radio Caprice Space Synth", src: "http://79.120.39.202:8000/spacesynth", details: "Radio Caprice http://radcap.ru"}
 ];
 
