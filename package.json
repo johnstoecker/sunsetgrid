@@ -26,6 +26,6 @@
   },
   "dependencies": {
     "realtime-bpm-analyzer": "^1.1.0",
-    "three": "^0.101.0"
+    "three": "^0.125.0"
   }
 }
