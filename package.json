@@ -20,12 +20,12 @@
   },
   "homepage": "https://github.com/johnstoecker/sunsetgrid#readme",
   "devDependencies": {
-    "webpack": "^4.29.0",
-    "webpack-cli": "^3.2.1",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^3.1.14"
   },
   "dependencies": {
-    "realtime-bpm-analyzer": "^1.1.0",
+    "realtime-bpm-analyzer": "^1.1.5",
     "three": "^0.101.0"
   }
 }
